@@ -34,7 +34,7 @@ function getSteps(db, catalogDb, recipeId) {
 }
 
 export function listRecipes(db, catalogDb = db) {
-  const recipes = db.prepare('SELECT id, name FROM recipes ORDER BY name').all();
+  const recipes = db.prepare('SELECT id, name, image_url AS imageUrl FROM recipes ORDER BY name').all();
   return recipes.map((recipe) => ({
     ...recipe,
     ingredients: getRecipeIngredients(db, catalogDb, recipe.id),
@@ -43,7 +43,7 @@ export function listRecipes(db, catalogDb = db) {
 }
 
 export function getRecipe(db, id, catalogDb = db) {
-  const recipe = db.prepare('SELECT id, name FROM recipes WHERE id = ?').get(id);
+  const recipe = db.prepare('SELECT id, name, image_url AS imageUrl FROM recipes WHERE id = ?').get(id);
   if (!recipe) return null;
   recipe.ingredients = getRecipeIngredients(db, catalogDb, id);
   recipe.steps = getSteps(db, catalogDb, id);
@@ -106,11 +106,12 @@ function normalizeSteps(steps, recipeIngredientIds) {
   });
 }
 
-export function addRecipe(db, { name, ingredients = [], steps = [] }, catalogDb = db) {
+export function addRecipe(db, { name, ingredients = [], steps = [], imageUrl = null }, catalogDb = db) {
   const cleaned = (name ?? '').trim();
   if (!cleaned) {
     throw new Error('Le nom de la recette ne peut pas être vide');
   }
+  const cleanedImageUrl = (imageUrl ?? '').trim() || null;
   const ingredientMap = normalizeIngredients(ingredients);
   const uniqueIds = [...ingredientMap.keys()];
   const placeholders = uniqueIds.map(() => '?').join(',');
@@ -123,7 +124,7 @@ export function addRecipe(db, { name, ingredients = [], steps = [] }, catalogDb 
 
   try {
     db.exec('BEGIN');
-    const result = db.prepare('INSERT INTO recipes (name) VALUES (?)').run(cleaned);
+    const result = db.prepare('INSERT INTO recipes (name, image_url) VALUES (?, ?)').run(cleaned, cleanedImageUrl);
     const recipeId = result.lastInsertRowid;
 
     const linkStmt = db.prepare('INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity, unit) VALUES (?, ?, ?, ?)');

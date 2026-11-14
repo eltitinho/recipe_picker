@@ -315,12 +315,29 @@ function formatStep(step) {
   return parts.join(' ');
 }
 
+function createImagePlaceholder() {
+  const div = el('div', '🍽️');
+  div.className = 'recipe-img-placeholder';
+  return div;
+}
+
 // buttons : [{ label, className, onClick }]
 function renderRecipe(recipe, buttons = [], badge = null) {
   const div = el('div');
   div.className = 'recipe';
   const title = el('strong', recipe.name);
   div.append(title);
+  if (recipe.imageUrl) {
+    const img = el('img');
+    img.src = recipe.imageUrl;
+    img.alt = recipe.name;
+    img.loading = 'lazy';
+    img.className = 'recipe-img';
+    img.onerror = () => { img.replaceWith(createImagePlaceholder()); };
+    div.append(img);
+  } else {
+    div.append(createImagePlaceholder());
+  }
   if (badge) {
     const b = el('span', badge);
     b.className = 'badge';
@@ -389,18 +406,36 @@ async function refreshMyRecipes() {
   }
 }
 
+let catalogCache = [];
+
 async function refreshCatalogRecipes() {
-  const catalog = await api.get('/api/catalog/recipes');
+  catalogCache = await api.get('/api/catalog/recipes');
+  renderCatalogRecipes();
+}
+
+function renderCatalogRecipes() {
   const savedIds = new Set(myRecipes.savedIds);
   const container = document.getElementById('catalog-recipes');
   container.innerHTML = '';
-  if (catalog.length === 0) {
+  if (catalogCache.length === 0) {
     const empty = el('p', 'Le catalogue est vide. Publie une recette avec la case "Publier dans le catalogue" !');
     empty.className = 'picker-empty';
     container.append(empty);
     return;
   }
-  for (const recipe of catalog) {
+  const search = normalize(document.getElementById('catalog-search').value.trim());
+  const matches = (recipe) =>
+    !search ||
+    normalize(recipe.name).includes(search) ||
+    recipe.ingredients.some((ing) => normalize(ing.name).includes(search));
+  const visible = catalogCache.filter(matches);
+  if (visible.length === 0) {
+    const empty = el('p', 'Aucune recette ne correspond à la recherche.');
+    empty.className = 'picker-empty';
+    container.append(empty);
+    return;
+  }
+  for (const recipe of visible) {
     const isSaved = savedIds.has(recipe.id);
     container.append(renderRecipe(recipe, [{
       label: isSaved ? '✓ Dans mes recettes' : '＋ Ajouter à mes recettes',
@@ -416,6 +451,8 @@ async function refreshCatalogRecipes() {
     }]));
   }
 }
+
+document.getElementById('catalog-search').oninput = renderCatalogRecipes;
 
 async function refreshIngredients() {
   allIngredients = await api.get('/api/ingredients');

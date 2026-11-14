@@ -227,6 +227,7 @@ const album = await fetchJson(ALBUM_API);
 const photos = album._embedded.albumphoto.sort((a, b) => a.order - b.order);
 const recipeRefs = photos.map((p) => ({
   title: p.title,
+  imageUrl: p.url ?? null,
   url: `https://www.marmiton.org/recettes/${p.text.match(/(recette_[a-z0-9-]+_\d+\.aspx)/)?.[1]}`,
 })).filter((r) => r.url && !r.url.endsWith('undefined'));
 
@@ -298,7 +299,7 @@ for (const ref of recipeRefs.slice(0, LIMIT)) {
     for (const [i, s] of steps.entries()) console.log(`    ${i + 1}. [${s.action}] ${s.description.slice(0, 90)}${s.description.length > 90 ? '…' : ''}`);
 
     if (!DRY_RUN) {
-      addRecipe(catalog, { name: ref.title, ingredients, steps });
+      addRecipe(catalog, { name: ref.title, ingredients, steps, imageUrl: ref.imageUrl });
       imported++;
     }
   } catch (err) {

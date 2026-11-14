@@ -26,6 +26,20 @@ describe('recipes', () => {
     expect(listRecipes(db)).toHaveLength(1);
   });
 
+  it('stocke et renvoie l\'image (imageUrl)', () => {
+    const withImage = addRecipe(db, {
+      name: 'Gratin',
+      ingredients: [{ id: fromage.id }],
+      imageUrl: 'https://example.com/gratin.jpg',
+    });
+    expect(withImage.imageUrl).toBe('https://example.com/gratin.jpg');
+    const withoutImage = addRecipe(db, { name: 'Salade', ingredients: [{ id: tomate.id }] });
+    expect(withoutImage.imageUrl).toBeNull();
+    const listed = listRecipes(db);
+    expect(listed.find((r) => r.name === 'Gratin').imageUrl).toBe('https://example.com/gratin.jpg');
+    expect(listed.find((r) => r.name === 'Salade').imageUrl).toBeNull();
+  });
+
   it('refuse un nom vide', () => {
     expect(() => addRecipe(db, { name: '', ingredients: [{ id: pates.id }] })).toThrow('vide');
   });

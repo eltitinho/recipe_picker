@@ -47,6 +47,18 @@ function recipesDdl(withIngredientFk) {
   `;
 }
 
+// Migrations idempotentes : ajoute une colonne si absente (vérifiée via PRAGMA).
+function ensureColumn(db, table, column, ddl) {
+  const columns = db.prepare(`PRAGMA table_info(${table})`).all().map((c) => c.name);
+  if (!columns.includes(column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${ddl}`);
+  }
+}
+
+function migrateRecipesTables(db) {
+  ensureColumn(db, 'recipes', 'image_url', 'image_url TEXT');
+}
+
 // Base catalogue : ingrédients partagés + recettes publiques.
 export function createCatalogDb(dbPath = ':memory:') {
   const db = open(dbPath);
@@ -59,6 +71,7 @@ export function createCatalogDb(dbPath = ':memory:') {
     );
   `);
   db.exec(recipesDdl(true));
+  migrateRecipesTables(db);
   return db;
 }
 
@@ -80,6 +93,7 @@ export function createUsersDb(dbPath = ':memory:') {
 export function createUserDb(dbPath = ':memory:') {
   const db = open(dbPath);
   db.exec(recipesDdl(false));
+  migrateRecipesTables(db);
   db.exec(`
     CREATE TABLE IF NOT EXISTS saved_recipes (
       catalog_recipe_id INTEGER PRIMARY KEY,

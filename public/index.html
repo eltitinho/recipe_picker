@@ -42,6 +42,9 @@
     .unit-label { display: none; color: #888; font-size: 0.85rem; }
     .ingredient-choice.checked .unit-label { display: inline; }
     .recipe { border-bottom: 1px solid #eee; padding: 0.5rem 0; }
+    .recipe-img { width: 100%; max-width: 280px; border-radius: 6px; margin: 0.4rem 0; display: block; }
+    .recipe-img-placeholder { width: 100%; max-width: 280px; height: 120px; border-radius: 6px; margin: 0.4rem 0; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #bbb; }
+    .catalog-search { width: 100%; margin-bottom: 0.8rem; }
     .recipe:last-child { border-bottom: none; }
     .recipe .ing-list { color: #666; font-size: 0.9rem; }
     .ing-vertical { margin: 0.2rem 0 0.4rem; padding-left: 1.2rem; }
@@ -103,6 +106,7 @@
       <h2>Mes recettes</h2>
       <div id="my-recipes"></div>
       <h2>Catalogue</h2>
+      <input type="text" id="catalog-search" class="catalog-search" placeholder="🔍 Rechercher une recette ou un ingrédient...">
       <div id="catalog-recipes"></div>
     </section>
 
