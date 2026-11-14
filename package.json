@@ -1,0 +1,18 @@
+{
+  "name": "recipe_picker",
+  "version": "0.1.0",
+  "description": "Choisir une recette en fonction des ingrédients disponibles",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "vitest run",
+    "db:backup": "node scripts/backup.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "vitest": "^3.1.1"
+  }
+}

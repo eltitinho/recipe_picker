@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Picker</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 1rem; background: #f7f7f7; color: #333; }
+    h1 { text-align: center; }
+    header.topbar { display: flex; align-items: center; justify-content: space-between; }
+    header.topbar h1 { margin: 0; flex: 1; }
+    .user-info { display: flex; align-items: center; gap: 0.5rem; color: #555; }
+    nav.tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+    nav.tabs button { flex: 1; padding: 0.7rem; border: none; border-radius: 8px 8px 0 0; background: #e0e0e0; color: #555; font-size: 1rem; cursor: pointer; }
+    nav.tabs button:hover { background: #d0d0d0; }
+    nav.tabs button.active { background: #fff; color: #4a7c59; font-weight: bold; box-shadow: 0 -1px 3px rgba(0,0,0,0.1); }
+    section.tab-panel { display: none; background: #fff; border-radius: 8px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    section.tab-panel.active { display: block; }
+    h2 { margin-top: 0; }
+    input[type="text"], input[type="number"], input[type="password"], select { padding: 0.4rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.4rem 0.8rem; border: none; border-radius: 4px; background: #4a7c59; color: #fff; cursor: pointer; }
+    button:hover { background: #3b6549; }
+    button.delete { background: #b00020; padding: 0.2rem 0.5rem; font-size: 0.85rem; }
+    button.delete:hover { background: #8c0019; }
+    button.secondary { background: #777; font-size: 0.85rem; }
+    button.secondary:hover { background: #555; }
+    ul { list-style: none; padding: 0; }
+    li { padding: 0.3rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag { background: #eef3ee; border: 1px solid #cfdccf; border-radius: 999px; padding: 0.3rem 0.7rem; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .error { color: #b00020; min-height: 1.2em; font-size: 0.9rem; }
+    h3.category { margin: 0.8rem 0 0.3rem; color: #4a7c59; font-size: 1rem; }
+    .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.3rem; margin: 0.5rem 0; }
+    .picker-controls { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .picker-controls input { flex: 1; }
+    .picker-panel { max-height: 320px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; padding: 0.3rem 0.8rem 0.8rem; background: #fbfbfb; }
+    .picker-empty { color: #888; font-style: italic; }
+    .ingredient-choice { display: flex; align-items: center; gap: 0.4rem; }
+    .quantity-input { width: 70px; display: none; }
+    .ingredient-choice.checked .quantity-input { display: inline-block; }
+    .unit-label { display: none; color: #888; font-size: 0.85rem; }
+    .ingredient-choice.checked .unit-label { display: inline; }
+    .recipe { border-bottom: 1px solid #eee; padding: 0.5rem 0; }
+    .recipe:last-child { border-bottom: none; }
+    .recipe .ing-list { color: #666; font-size: 0.9rem; }
+    .recipe .recipe-actions { margin-top: 0.3rem; display: flex; gap: 0.5rem; }
+    .badge { background: #dce8de; color: #3b6549; border-radius: 999px; padding: 0.1rem 0.6rem; font-size: 0.75rem; margin-left: 0.5rem; }
+    .step-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.5rem; margin-bottom: 0.5rem; background: #f2f6f2; border-radius: 6px; }
+    .step-num { font-weight: bold; color: #4a7c59; min-width: 1.5rem; }
+    .step-desc { flex: 1; min-width: 150px; }
+    .step-ings { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .step-ings label { background: #fff; border: 1px solid #cfdccf; border-radius: 999px; padding: 0.15rem 0.6rem; font-size: 0.85rem; cursor: pointer; }
+    .step-ings input { display: none; }
+    .step-ings label:has(input:checked) { background: #4a7c59; color: #fff; }
+    .recipe ol.steps { margin: 0.3rem 0; padding-left: 1.5rem; color: #555; font-size: 0.9rem; }
+    .recipe ol.steps li { display: list-item; padding: 0.15rem 0; }
+    /* Écran d'authentification */
+    #auth-screen { max-width: 420px; margin: 3rem auto; background: #fff; border-radius: 8px; padding: 1.5rem 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    #auth-screen form { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+    .publish-row { margin: 0.8rem 0; }
+    .publish-row label { cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <div id="auth-screen" hidden>
+    <h1>🍳 Recipe Picker</h1>
+    <h2>Connexion</h2>
+    <form id="login-form">
+      <input type="text" id="login-username" placeholder="Nom d'utilisateur" required autocomplete="username">
+      <input type="password" id="login-password" placeholder="Mot de passe" required autocomplete="current-password">
+      <button type="submit">Se connecter</button>
+      <p class="error" id="login-error"></p>
+    </form>
+    <h2>Inscription</h2>
+    <form id="register-form">
+      <input type="text" id="register-username" placeholder="Nom d'utilisateur (a-z, 0-9, -, _)" required autocomplete="username">
+      <input type="password" id="register-password" placeholder="Mot de passe (6 caractères min)" required autocomplete="new-password">
+      <button type="submit">Créer mon compte</button>
+      <p class="error" id="register-error"></p>
+    </form>
+  </div>
+
+  <div id="app-screen" hidden>
+    <header class="topbar">
+      <h1>🍳 Recipe Picker</h1>
+      <div class="user-info">
+        <span id="current-user"></span>
+        <button id="logout-btn" class="secondary">Déconnexion</button>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button data-tab="tab-selection" class="active">Sélection de recettes</button>
+      <button data-tab="tab-add-recipe">Ajout de recette</button>
+      <button data-tab="tab-ingredients">Gestion des ingrédients</button>
+    </nav>
+
+    <section id="tab-selection" class="tab-panel active">
+      <h2>Mes recettes</h2>
+      <div id="my-recipes"></div>
+      <h2>Catalogue</h2>
+      <div id="catalog-recipes"></div>
+    </section>
+
+    <section id="tab-add-recipe" class="tab-panel">
+      <h2>Ajouter une recette</h2>
+      <form id="recipe-form">
+        <input type="text" id="recipe-name" placeholder="Nom de la recette" required>
+        <label class="publish-row">
+          <input type="checkbox" id="recipe-publish"> Publier dans le catalogue (visible par tous)
+        </label>
+        <p>Cochez les ingrédients et indiquez la quantité si besoin :</p>
+        <div class="picker-controls">
+          <input type="text" id="ingredient-search" placeholder="🔍 Rechercher un ingrédient...">
+          <select id="ingredient-filter"></select>
+        </div>
+        <div class="picker-panel" id="recipe-ingredients-checkboxes"></div>
+        <h3>Étapes</h3>
+        <div id="steps-list"></div>
+        <button type="button" id="add-step-btn">+ Ajouter une étape</button>
+        <br><br>
+        <button type="submit">Ajouter la recette</button>
+      </form>
+      <p class="error" id="recipe-error"></p>
+    </section>
+
+    <section id="tab-ingredients" class="tab-panel">
+      <h2>Mes ingrédients</h2>
+      <form id="ingredient-form">
+        <input type="text" id="ingredient-name" placeholder="Nom de l'ingrédient" required>
+        <select id="ingredient-category"></select>
+        <button type="submit">Ajouter</button>
+      </form>
+      <p class="error" id="ingredient-error"></p>
+      <div id="ingredient-list"></div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

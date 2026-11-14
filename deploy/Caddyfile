@@ -1,0 +1,12 @@
+# Recipe Picker — reverse proxy Caddy
+# HTTPS automatique via Let's Encrypt (le domaine doit pointer vers ce serveur).
+#
+# Génère le hash du mot de passe avec :  caddy hash-password
+# puis remplace le hash ci-dessous.
+
+recettes.example.com {
+	basic_auth {
+		kristian $2a$14$REMPLACE_MOI_PAR_LE_HASH_BCRYPT
+	}
+	reverse_proxy 127.0.0.1:3000
+}

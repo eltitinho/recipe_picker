@@ -1,0 +1,19 @@
+[Unit]
+Description=Recipe Picker
+After=network.target
+
+[Service]
+Type=simple
+# Adapte l'utilisateur et les chemins à ton serveur
+User=recipes
+WorkingDirectory=/opt/recipe_picker
+Environment=PORT=3000
+Environment=RECIPE_DATA_DIR=/opt/recipe_picker/data
+# Génère un secret robuste : openssl rand -hex 32
+Environment=SESSION_SECRET=CHANGE_MOI
+ExecStart=/usr/bin/node src/server.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
