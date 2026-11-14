@@ -106,7 +106,8 @@ function normalizeSteps(steps, recipeIngredientIds) {
   });
 }
 
-export function addRecipe(db, { name, ingredients = [], steps = [], imageUrl = null, servings = 4 }, catalogDb = db) {
+// Valide et normalise les données d'une recette (ajout ou modification).
+function validateRecipeData({ name, ingredients = [], steps = [], imageUrl = null, servings = 4 }, catalogDb) {
   const cleaned = (name ?? '').trim();
   if (!cleaned) {
     throw new Error('Le nom de la recette ne peut pas être vide');
@@ -125,32 +126,63 @@ export function addRecipe(db, { name, ingredients = [], steps = [], imageUrl = n
   }
   const unitById = new Map(catalogRows.map((row) => [row.id, row.defaultUnit]));
   const normalizedSteps = normalizeSteps(steps, new Set(uniqueIds));
+  return { cleaned, cleanedImageUrl, cleanedServings, ingredientMap, unitById, normalizedSteps };
+}
 
+// Insère ingrédients et étapes d'une recette (après INSERT ou UPDATE).
+function insertRecipeParts(db, recipeId, { ingredientMap, unitById, normalizedSteps }) {
+  const linkStmt = db.prepare('INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity, unit) VALUES (?, ?, ?, ?)');
+  for (const [ingredientId, quantity] of ingredientMap) {
+    linkStmt.run(recipeId, ingredientId, quantity, unitById.get(ingredientId) ?? 'g');
+  }
+
+  const stepStmt = db.prepare('INSERT INTO recipe_steps (recipe_id, position, action, utensil, description) VALUES (?, ?, ?, ?, ?)');
+  const stepIngStmt = db.prepare('INSERT INTO step_ingredients (step_id, ingredient_id) VALUES (?, ?)');
+  for (const step of normalizedSteps) {
+    const stepId = stepStmt.run(recipeId, step.position, step.action, step.utensil, step.description).lastInsertRowid;
+    for (const ingredientId of step.ingredientIds) {
+      stepIngStmt.run(stepId, ingredientId);
+    }
+  }
+}
+
+export function addRecipe(db, data, catalogDb = db) {
+  const validated = validateRecipeData(data, catalogDb);
   try {
     db.exec('BEGIN');
-    const result = db.prepare('INSERT INTO recipes (name, image_url, servings) VALUES (?, ?, ?)').run(cleaned, cleanedImageUrl, cleanedServings);
-    const recipeId = result.lastInsertRowid;
-
-    const linkStmt = db.prepare('INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity, unit) VALUES (?, ?, ?, ?)');
-    for (const [ingredientId, quantity] of ingredientMap) {
-      linkStmt.run(recipeId, ingredientId, quantity, unitById.get(ingredientId) ?? 'g');
+    const result = db.prepare('INSERT INTO recipes (name, image_url, servings) VALUES (?, ?, ?)').run(validated.cleaned, validated.cleanedImageUrl, validated.cleanedServings);
+    insertRecipeParts(db, result.lastInsertRowid, validated);
+    db.exec('COMMIT');
+    return getRecipe(db, result.lastInsertRowid, catalogDb);
+  } catch (err) {
+    db.exec('ROLLBACK');
+    if (err.message.includes('UNIQUE constraint failed')) {
+      throw new Error(`La recette "${validated.cleaned}" existe déjà`);
     }
+    throw err;
+  }
+}
 
-    const stepStmt = db.prepare('INSERT INTO recipe_steps (recipe_id, position, action, utensil, description) VALUES (?, ?, ?, ?, ?)');
-    const stepIngStmt = db.prepare('INSERT INTO step_ingredients (step_id, ingredient_id) VALUES (?, ?)');
-    for (const step of normalizedSteps) {
-      const stepId = stepStmt.run(recipeId, step.position, step.action, step.utensil, step.description).lastInsertRowid;
-      for (const ingredientId of step.ingredientIds) {
-        stepIngStmt.run(stepId, ingredientId);
-      }
-    }
-
+// Modifie une recette existante (ingrédients et étapes réinsérés).
+// image_url n'est pas modifiable via le formulaire : elle est conservée.
+export function updateRecipe(db, id, data, catalogDb = db) {
+  const recipeId = Number(id);
+  if (!getRecipe(db, recipeId, catalogDb)) {
+    throw new Error('Recette introuvable');
+  }
+  const validated = validateRecipeData(data, catalogDb);
+  try {
+    db.exec('BEGIN');
+    db.prepare('UPDATE recipes SET name = ?, servings = ? WHERE id = ?').run(validated.cleaned, validated.cleanedServings, recipeId);
+    db.prepare('DELETE FROM recipe_ingredients WHERE recipe_id = ?').run(recipeId);
+    db.prepare('DELETE FROM recipe_steps WHERE recipe_id = ?').run(recipeId);
+    insertRecipeParts(db, recipeId, validated);
     db.exec('COMMIT');
     return getRecipe(db, recipeId, catalogDb);
   } catch (err) {
     db.exec('ROLLBACK');
     if (err.message.includes('UNIQUE constraint failed')) {
-      throw new Error(`La recette "${cleaned}" existe déjà`);
+      throw new Error(`La recette "${validated.cleaned}" existe déjà`);
     }
     throw err;
   }

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createCatalogDb } from '../src/db.js';
 import { addIngredient } from '../src/ingredients.js';
-import { listRecipes, addRecipe, deleteRecipe, findRecipesByIngredients } from '../src/recipes.js';
+import { listRecipes, addRecipe, updateRecipe, deleteRecipe, findRecipesByIngredients } from '../src/recipes.js';
 
 let db;
 let tomate, oignon, pates, fromage;
@@ -54,6 +54,53 @@ describe('recipes', () => {
     expect(() => addRecipe(db, { name: 'B', ingredients: [{ id: tomate.id }], servings: -2 })).toThrow('entier positif');
     expect(() => addRecipe(db, { name: 'C', ingredients: [{ id: tomate.id }], servings: 2.5 })).toThrow('entier positif');
     expect(() => addRecipe(db, { name: 'D', ingredients: [{ id: tomate.id }], servings: 'abc' })).toThrow('entier positif');
+  });
+
+  it('modifie une recette (nom, portions, ingrédients, étapes)', () => {
+    const recipe = addRecipe(db, {
+      name: 'Pâtes tomate',
+      servings: 2,
+      ingredients: [{ id: pates.id, quantity: 200 }, { id: tomate.id }],
+      steps: [{ action: 'cook', description: 'Cuire les pâtes', ingredientIds: [pates.id] }],
+      imageUrl: 'https://example.com/pates.jpg',
+    });
+    const updated = updateRecipe(db, recipe.id, {
+      name: 'Pâtes tomate oignon',
+      servings: 6,
+      ingredients: [{ id: pates.id, quantity: 500 }, { id: oignon.id, quantity: 1 }],
+      steps: [
+        { action: 'prepare', description: 'Émincer', ingredientIds: [oignon.id] },
+        { action: 'cook', description: 'Tout cuire', ingredientIds: [pates.id, oignon.id] },
+      ],
+    });
+    expect(updated.id).toBe(recipe.id);
+    expect(updated.name).toBe('Pâtes tomate oignon');
+    expect(updated.servings).toBe(6);
+    expect(updated.imageUrl).toBe('https://example.com/pates.jpg'); // conservée
+    expect(updated.ingredients.map((i) => i.name).sort()).toEqual(['Oignon', 'Pâtes']);
+    expect(updated.ingredients.find((i) => i.name === 'Pâtes').quantity).toBe(500);
+    expect(updated.steps).toHaveLength(2);
+    expect(updated.steps[0].action).toBe('prepare');
+    expect(updated.steps[1].ingredients.map((i) => i.name).sort()).toEqual(['Oignon', 'Pâtes']);
+    expect(listRecipes(db)).toHaveLength(1);
+  });
+
+  it('refuse de modifier une recette introuvable', () => {
+    expect(() => updateRecipe(db, 999, { name: 'X', ingredients: [{ id: tomate.id }] })).toThrow('introuvable');
+  });
+
+  it('applique les mêmes validations à la modification', () => {
+    const recipe = addRecipe(db, { name: 'Gratin', ingredients: [{ id: fromage.id }] });
+    addRecipe(db, { name: 'Salade', ingredients: [{ id: tomate.id }] });
+    expect(() => updateRecipe(db, recipe.id, { name: '', ingredients: [{ id: tomate.id }] })).toThrow('vide');
+    expect(() => updateRecipe(db, recipe.id, { name: 'X', ingredients: [] })).toThrow('au moins un ingrédient');
+    expect(() => updateRecipe(db, recipe.id, { name: 'X', ingredients: [{ id: 999 }] })).toThrow('inconnus');
+    expect(() => updateRecipe(db, recipe.id, { name: 'X', ingredients: [{ id: tomate.id }], servings: 0 })).toThrow('entier positif');
+    expect(() => updateRecipe(db, recipe.id, { name: 'Salade', ingredients: [{ id: tomate.id }] })).toThrow('existe déjà');
+    // Échec de validation : la recette d'origine est intacte
+    const unchanged = listRecipes(db).find((r) => r.id === recipe.id);
+    expect(unchanged.name).toBe('Gratin');
+    expect(unchanged.ingredients.map((i) => i.name)).toEqual(['Fromage']);
   });
 
   it('refuse un nom vide', () => {

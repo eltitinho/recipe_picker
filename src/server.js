@@ -4,7 +4,7 @@ import path from 'node:path';
 import { DatabaseManager } from './db.js';
 import { listIngredients, addIngredient, deleteIngredient } from './ingredients.js';
 import {
-  listRecipes, getRecipe, addRecipe, deleteRecipe,
+  listRecipes, getRecipe, addRecipe, updateRecipe, deleteRecipe,
   saveRecipe, unsaveRecipe, listSavedRecipeIds,
 } from './recipes.js';
 import { CATEGORIES, seedIfEmpty } from './seed.js';
@@ -148,6 +148,18 @@ export function createApp(manager, secret = process.env.SESSION_SECRET || 'dev-s
       }
       res.status(201).json({ ...recipe, published });
     } catch (err) {
+      handleError(res, err);
+    }
+  });
+
+  app.put('/api/my/recipes/:id', (req, res) => {
+    const userDb = manager.getUserDb(req.username);
+    try {
+      res.json(updateRecipe(userDb, Number(req.params.id), req.body, manager.catalog));
+    } catch (err) {
+      if (err.message === 'Recette introuvable') {
+        return res.status(404).json({ error: err.message });
+      }
       handleError(res, err);
     }
   });

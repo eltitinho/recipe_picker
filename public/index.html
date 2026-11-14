@@ -74,6 +74,9 @@
     #shopping-generate { margin: 0.8rem 0; }
     #shopping-list .shopping-item { display: flex; align-items: center; gap: 0.5rem; }
     #shopping-list .shopping-item input:checked + span { text-decoration: line-through; color: #aaa; }
+    .edit-recipe-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0; border-bottom: 1px solid #eee; }
+    .edit-recipe-row:last-child { border-bottom: none; }
+    .edit-recipe-row .name { flex: 1; }
   </style>
 </head>
 <body>
@@ -107,7 +110,7 @@
 
     <nav class="tabs">
       <button data-tab="tab-selection" class="active">Sélection de recettes</button>
-      <button data-tab="tab-add-recipe">Ajout de recette</button>
+      <button data-tab="tab-add-recipe">Gestion de recettes</button>
       <button data-tab="tab-ingredients">Gestion des ingrédients</button>
       <button data-tab="tab-shopping">🛒 Liste de courses</button>
     </nav>
@@ -121,13 +124,13 @@
     </section>
 
     <section id="tab-add-recipe" class="tab-panel">
-      <h2>Ajouter une recette</h2>
+      <h2 id="recipe-form-title">Ajouter une recette</h2>
       <form id="recipe-form">
         <input type="text" id="recipe-name" placeholder="Nom de la recette" required>
         <label class="servings-row">
           Pour <input type="number" id="recipe-servings" min="1" step="1" value="4" required> personnes
         </label>
-        <label class="publish-row">
+        <label class="publish-row" id="recipe-publish-row">
           <input type="checkbox" id="recipe-publish"> Publier dans le catalogue (visible par tous)
         </label>
         <p>Cochez les ingrédients et indiquez la quantité si besoin :</p>
@@ -140,9 +143,12 @@
         <div id="steps-list"></div>
         <button type="button" id="add-step-btn">+ Ajouter une étape</button>
         <br><br>
-        <button type="submit">Ajouter la recette</button>
+        <button type="submit" id="recipe-submit-btn">Ajouter la recette</button>
+        <button type="button" id="recipe-cancel-btn" class="secondary" hidden>Annuler la modification</button>
       </form>
       <p class="error" id="recipe-error"></p>
+      <h2>Mes recettes</h2>
+      <div id="my-created-recipes"></div>
     </section>
 
     <section id="tab-shopping" class="tab-panel">

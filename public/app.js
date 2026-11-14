@@ -20,6 +20,7 @@ async function request(method, path, body) {
 const api = {
   get: (path) => request('GET', path),
   post: (path, body) => request('POST', path, body),
+  put: (path, body) => request('PUT', path, body),
   delete: (path) => request('DELETE', path),
 };
 
@@ -410,6 +411,7 @@ async function refreshMyRecipes() {
     }], 'catalogue'));
   }
   renderShoppingPicker();
+  renderMyCreatedRecipes();
 }
 
 // --- Liste de courses ---
@@ -637,6 +639,76 @@ document.getElementById('ingredient-form').onsubmit = async (e) => {
   }
 };
 
+// --- Mode édition du formulaire de recette ---
+
+let editingRecipeId = null;
+
+function setFormMode(edit) {
+  document.getElementById('recipe-form-title').textContent = edit ? 'Modifier la recette' : 'Ajouter une recette';
+  document.getElementById('recipe-submit-btn').textContent = edit ? 'Enregistrer les modifications' : 'Ajouter la recette';
+  document.getElementById('recipe-publish-row').hidden = edit;
+  document.getElementById('recipe-cancel-btn').hidden = !edit;
+}
+
+function resetRecipeForm() {
+  editingRecipeId = null;
+  document.getElementById('recipe-form').reset();
+  document.getElementById('recipe-error').textContent = '';
+  recipeSelection.clear();
+  document.getElementById('steps-list').innerHTML = '';
+  setFormMode(false);
+  renderIngredientPicker();
+}
+
+function startEdit(recipe) {
+  resetRecipeForm();
+  editingRecipeId = recipe.id;
+  document.getElementById('recipe-name').value = recipe.name;
+  document.getElementById('recipe-servings').value = recipe.servings || 4;
+  for (const ing of recipe.ingredients) {
+    recipeSelection.set(ing.id, { name: ing.name, quantity: ing.quantity ?? '' });
+  }
+  renderIngredientPicker();
+  for (const step of recipe.steps) {
+    addStepRow();
+    const row = document.querySelector('#steps-list .step-row:last-child');
+    row.querySelector('.step-action').value = step.action;
+    row.querySelector('.step-utensil').value = step.utensil ?? '';
+    row.querySelector('.step-desc').value = step.description ?? '';
+    const stepIngIds = new Set(step.ingredients.map((i) => i.id));
+    for (const cb of row.querySelectorAll('.step-ings input')) {
+      cb.checked = stepIngIds.has(Number(cb.value));
+    }
+  }
+  setFormMode(true);
+  document.getElementById('recipe-form-title').scrollIntoView({ behavior: 'smooth' });
+}
+
+document.getElementById('recipe-cancel-btn').onclick = resetRecipeForm;
+
+// Liste de mes recettes créées (onglet Gestion), avec bouton Modifier.
+function renderMyCreatedRecipes() {
+  const container = document.getElementById('my-created-recipes');
+  container.innerHTML = '';
+  if (myRecipes.created.length === 0) {
+    const empty = el('p', 'Aucune recette créée pour l\'instant.');
+    empty.className = 'picker-empty';
+    container.append(empty);
+    return;
+  }
+  for (const recipe of myRecipes.created) {
+    const row = el('div');
+    row.className = 'edit-recipe-row';
+    const name = el('span', `${recipe.name} (${recipe.servings || 4} pers.)`);
+    name.className = 'name';
+    const editBtn = el('button', '✏️ Modifier');
+    editBtn.className = 'secondary';
+    editBtn.onclick = () => startEdit(recipe);
+    row.append(name, editBtn);
+    container.append(row);
+  }
+}
+
 document.getElementById('recipe-form').onsubmit = async (e) => {
   e.preventDefault();
   const error = document.getElementById('recipe-error');
@@ -652,17 +724,23 @@ document.getElementById('recipe-form').onsubmit = async (e) => {
     ingredientIds: [...row.querySelectorAll('.step-ings input:checked')].map((cb) => Number(cb.value)),
   }));
   try {
-    await api.post('/api/my/recipes', {
-      name: document.getElementById('recipe-name').value,
-      servings: document.getElementById('recipe-servings').value,
-      ingredients,
-      steps,
-      publish: document.getElementById('recipe-publish').checked,
-    });
-    document.getElementById('recipe-form').reset();
-    recipeSelection.clear();
-    document.getElementById('steps-list').innerHTML = '';
-    renderIngredientPicker();
+    if (editingRecipeId !== null) {
+      await api.put(`/api/my/recipes/${editingRecipeId}`, {
+        name: document.getElementById('recipe-name').value,
+        servings: document.getElementById('recipe-servings').value,
+        ingredients,
+        steps,
+      });
+    } else {
+      await api.post('/api/my/recipes', {
+        name: document.getElementById('recipe-name').value,
+        servings: document.getElementById('recipe-servings').value,
+        ingredients,
+        steps,
+        publish: document.getElementById('recipe-publish').checked,
+      });
+    }
+    resetRecipeForm();
     refreshAll();
   } catch (err) {
     error.textContent = err.message;
