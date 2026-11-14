@@ -227,7 +227,7 @@ const album = await fetchJson(ALBUM_API);
 const photos = album._embedded.albumphoto.sort((a, b) => a.order - b.order);
 const recipeRefs = photos.map((p) => ({
   title: p.title,
-  imageUrl: p.url ?? null,
+  imageUrl: p.images?.main ?? p.urlImage ?? null,
   url: `https://www.marmiton.org/recettes/${p.text.match(/(recette_[a-z0-9-]+_\d+\.aspx)/)?.[1]}`,
 })).filter((r) => r.url && !r.url.endsWith('undefined'));
 

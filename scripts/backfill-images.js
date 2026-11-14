@@ -20,8 +20,9 @@ const update = catalog.prepare(
 
 let updated = 0;
 for (const photo of album._embedded.albumphoto) {
-  if (!photo.url) continue;
-  updated += update.run(photo.url, photo.title).changes;
+  const imageUrl = photo.images?.main ?? photo.urlImage ?? null;
+  if (!imageUrl) continue;
+  updated += update.run(imageUrl, photo.title).changes;
 }
 
 console.log(`Images mises à jour : ${updated}/${album._embedded.albumphoto.length} recettes de l'album${FORCE ? ' (--force)' : ''}`);
