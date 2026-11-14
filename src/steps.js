@@ -12,6 +12,7 @@ export const STEP_ACTIONS = [
 export const UTENSILS = [
   'Poêle',
   'Casserole',
+  'Air Fryer',
   'Marmite',
   'Cocotte',
   'Wok',
