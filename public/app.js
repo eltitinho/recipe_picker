@@ -326,9 +326,15 @@ function renderRecipe(recipe, buttons = [], badge = null) {
     b.className = 'badge';
     div.append(b);
   }
-  const ingNames = recipe.ingredients.map(formatIngredient).join(', ');
-  const ingDiv = el('div', `Ingrédients : ${ingNames}`);
+  const ingDiv = el('div');
   ingDiv.className = 'ing-list';
+  ingDiv.append(el('div', 'Ingrédients :'));
+  const ul = el('ul');
+  ul.className = 'ing-vertical';
+  for (const ing of recipe.ingredients) {
+    ul.append(el('li', formatIngredient(ing)));
+  }
+  ingDiv.append(ul);
   div.append(ingDiv);
   if (recipe.steps && recipe.steps.length > 0) {
     const ol = el('ol');

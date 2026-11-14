@@ -51,6 +51,8 @@ describe('seed', () => {
     expect(byName['Crème fraîche']).toBe('ml');
     expect(byName['Huile d\'olive']).toBe('ml');
     expect(byName['Vin blanc']).toBe('ml');
+    expect(byName['Sauce tomate']).toBe('ml');
+    expect(byName['Tomates pelées']).toBe('ml');
     expect(byName['Œuf']).toBe('pièce');
     expect(byName['Tomate']).toBe('g');
   });
