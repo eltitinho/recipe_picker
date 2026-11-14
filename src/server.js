@@ -1,5 +1,6 @@
 import express from 'express';
 import { fileURLToPath } from 'node:url';
+import os from 'node:os';
 import path from 'node:path';
 import { DatabaseManager } from './db.js';
 import { listIngredients, addIngredient, deleteIngredient } from './ingredients.js';
@@ -10,13 +11,17 @@ import {
 import { CATEGORIES, seedIfEmpty } from './seed.js';
 import { STEP_ACTIONS, UTENSILS } from './steps.js';
 import { register, login, readSession, sessionCookieHeader, clearSessionCookieHeader } from './auth.js';
+import { saveImage } from './images.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function createApp(manager, secret = process.env.SESSION_SECRET || 'dev-secret-change-me') {
   const app = express();
-  app.use(express.json());
+  app.use(express.json({ limit: '6mb' })); // marge pour les images en base64
   app.use(express.static(path.join(__dirname, '..', 'public')));
+  if (!manager.memory) {
+    app.use('/images/user', express.static(path.join(manager.dataDir, 'images')));
+  }
 
   const handleError = (res, err) => res.status(400).json({ error: err.message });
 
@@ -96,6 +101,19 @@ export function createApp(manager, secret = process.env.SESSION_SECRET || 'dev-s
 
   app.get('/api/step-catalog', (req, res) => {
     res.json({ actions: STEP_ACTIONS, utensils: UTENSILS });
+  });
+
+  // --- Upload d'image de recette ---
+
+  app.post('/api/my/images', (req, res) => {
+    try {
+      const imagesDir = manager.memory
+        ? path.join(os.tmpdir(), 'recipe-picker-test-images')
+        : path.join(manager.dataDir, 'images');
+      res.status(201).json({ url: saveImage(imagesDir, req.username, req.body.dataUrl) });
+    } catch (err) {
+      handleError(res, err);
+    }
   });
 
   // --- Recettes du catalogue (publiques) ---

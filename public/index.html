@@ -77,6 +77,11 @@
     .edit-recipe-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0; border-bottom: 1px solid #eee; }
     .edit-recipe-row:last-child { border-bottom: none; }
     .edit-recipe-row .name { flex: 1; }
+    .image-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0.5rem 0; }
+    .image-row input[type="text"] { flex: 1; min-width: 200px; }
+    .image-upload-label { padding: 0.4rem 0.8rem; border-radius: 4px; background: #777; color: #fff; cursor: pointer; font-size: 0.85rem; }
+    .image-upload-label:hover { background: #555; }
+    #recipe-image-preview { max-width: 180px; margin: 0; }
   </style>
 </head>
 <body>
@@ -130,6 +135,16 @@
         <label class="servings-row">
           Pour <input type="number" id="recipe-servings" min="1" step="1" value="4" required> personnes
         </label>
+        <div class="image-row">
+          <img id="recipe-image-preview" class="recipe-img" alt="Aperçu de l'image" hidden>
+          <input type="text" id="recipe-image-url" placeholder="URL de l'image (optionnel)">
+          <label class="image-upload-label">
+            📷 Depuis mon appareil
+            <input type="file" id="recipe-image-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+          </label>
+          <button type="button" id="recipe-image-clear" class="secondary" hidden>✕ Image</button>
+          <p class="error" id="recipe-image-error"></p>
+        </div>
         <label class="publish-row" id="recipe-publish-row">
           <input type="checkbox" id="recipe-publish"> Publier dans le catalogue (visible par tous)
         </label>

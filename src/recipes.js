@@ -164,16 +164,21 @@ export function addRecipe(db, data, catalogDb = db) {
 }
 
 // Modifie une recette existante (ingrédients et étapes réinsérés).
-// image_url n'est pas modifiable via le formulaire : elle est conservée.
+// imageUrl absent de data → conservée ; '' ou null → supprimée ; chaîne → remplacée.
 export function updateRecipe(db, id, data, catalogDb = db) {
   const recipeId = Number(id);
   if (!getRecipe(db, recipeId, catalogDb)) {
     throw new Error('Recette introuvable');
   }
+  const imageProvided = Object.prototype.hasOwnProperty.call(data ?? {}, 'imageUrl');
   const validated = validateRecipeData(data, catalogDb);
   try {
     db.exec('BEGIN');
-    db.prepare('UPDATE recipes SET name = ?, servings = ? WHERE id = ?').run(validated.cleaned, validated.cleanedServings, recipeId);
+    if (imageProvided) {
+      db.prepare('UPDATE recipes SET name = ?, servings = ?, image_url = ? WHERE id = ?').run(validated.cleaned, validated.cleanedServings, validated.cleanedImageUrl, recipeId);
+    } else {
+      db.prepare('UPDATE recipes SET name = ?, servings = ? WHERE id = ?').run(validated.cleaned, validated.cleanedServings, recipeId);
+    }
     db.prepare('DELETE FROM recipe_ingredients WHERE recipe_id = ?').run(recipeId);
     db.prepare('DELETE FROM recipe_steps WHERE recipe_id = ?').run(recipeId);
     insertRecipeParts(db, recipeId, validated);

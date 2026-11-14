@@ -85,6 +85,23 @@ describe('recipes', () => {
     expect(listRecipes(db)).toHaveLength(1);
   });
 
+  it('modifie l\'image seulement si imageUrl est fourni', () => {
+    const recipe = addRecipe(db, {
+      name: 'Gratin',
+      ingredients: [{ id: fromage.id }],
+      imageUrl: 'https://example.com/avant.jpg',
+    });
+    // imageUrl absent → conservée
+    const kept = updateRecipe(db, recipe.id, { name: 'Gratin', ingredients: [{ id: fromage.id }] });
+    expect(kept.imageUrl).toBe('https://example.com/avant.jpg');
+    // imageUrl fourni → remplacée
+    const replaced = updateRecipe(db, recipe.id, { name: 'Gratin', ingredients: [{ id: fromage.id }], imageUrl: '/images/user/x.png' });
+    expect(replaced.imageUrl).toBe('/images/user/x.png');
+    // imageUrl vide → supprimée
+    const cleared = updateRecipe(db, recipe.id, { name: 'Gratin', ingredients: [{ id: fromage.id }], imageUrl: '' });
+    expect(cleared.imageUrl).toBeNull();
+  });
+
   it('refuse de modifier une recette introuvable', () => {
     expect(() => updateRecipe(db, 999, { name: 'X', ingredients: [{ id: tomate.id }] })).toThrow('introuvable');
   });

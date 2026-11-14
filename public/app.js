@@ -639,6 +639,53 @@ document.getElementById('ingredient-form').onsubmit = async (e) => {
   }
 };
 
+// --- Champ image du formulaire de recette ---
+
+// Image du formulaire : URL externe ou chemin /images/user/... après upload.
+let formImageUrl = null;
+
+function renderImageField() {
+  const preview = document.getElementById('recipe-image-preview');
+  preview.hidden = !formImageUrl;
+  preview.src = formImageUrl || '';
+  document.getElementById('recipe-image-clear').hidden = !formImageUrl;
+}
+
+document.getElementById('recipe-image-url').oninput = (e) => {
+  formImageUrl = e.target.value.trim() || null;
+  renderImageField();
+};
+
+document.getElementById('recipe-image-file').onchange = async (e) => {
+  const file = e.target.files[0];
+  const error = document.getElementById('recipe-image-error');
+  error.textContent = '';
+  if (!file) return;
+  try {
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+    const { url } = await api.post('/api/my/images', { dataUrl });
+    formImageUrl = url;
+    document.getElementById('recipe-image-url').value = url;
+    renderImageField();
+  } catch (err) {
+    error.textContent = err.message;
+  } finally {
+    e.target.value = '';
+  }
+};
+
+document.getElementById('recipe-image-clear').onclick = () => {
+  formImageUrl = null;
+  document.getElementById('recipe-image-url').value = '';
+  document.getElementById('recipe-image-error').textContent = '';
+  renderImageField();
+};
+
 // --- Mode édition du formulaire de recette ---
 
 let editingRecipeId = null;
@@ -656,6 +703,10 @@ function resetRecipeForm() {
   document.getElementById('recipe-error').textContent = '';
   recipeSelection.clear();
   document.getElementById('steps-list').innerHTML = '';
+  formImageUrl = null;
+  document.getElementById('recipe-image-url').value = '';
+  document.getElementById('recipe-image-error').textContent = '';
+  renderImageField();
   setFormMode(false);
   renderIngredientPicker();
 }
@@ -665,6 +716,9 @@ function startEdit(recipe) {
   editingRecipeId = recipe.id;
   document.getElementById('recipe-name').value = recipe.name;
   document.getElementById('recipe-servings').value = recipe.servings || 4;
+  formImageUrl = recipe.imageUrl ?? null;
+  document.getElementById('recipe-image-url').value = recipe.imageUrl ?? '';
+  renderImageField();
   for (const ing of recipe.ingredients) {
     recipeSelection.set(ing.id, { name: ing.name, quantity: ing.quantity ?? '' });
   }
@@ -730,6 +784,7 @@ document.getElementById('recipe-form').onsubmit = async (e) => {
         servings: document.getElementById('recipe-servings').value,
         ingredients,
         steps,
+        imageUrl: formImageUrl,
       });
     } else {
       await api.post('/api/my/recipes', {
@@ -737,6 +792,7 @@ document.getElementById('recipe-form').onsubmit = async (e) => {
         servings: document.getElementById('recipe-servings').value,
         ingredients,
         steps,
+        imageUrl: formImageUrl,
         publish: document.getElementById('recipe-publish').checked,
       });
     }
