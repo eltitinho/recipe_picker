@@ -298,8 +298,11 @@ for (const ref of recipeRefs.slice(0, LIMIT)) {
     for (const d of ingredients) console.log(`    - ${d._debug}`);
     for (const [i, s] of steps.entries()) console.log(`    ${i + 1}. [${s.action}] ${s.description.slice(0, 90)}${s.description.length > 90 ? '…' : ''}`);
 
+    const yieldMatch = String(marmiton.recipeYield ?? '').match(/\d+/);
+    const servings = yieldMatch ? Number(yieldMatch[0]) : 4;
+
     if (!DRY_RUN) {
-      addRecipe(catalog, { name: ref.title, ingredients, steps, imageUrl: ref.imageUrl });
+      addRecipe(catalog, { name: ref.title, ingredients, steps, imageUrl: ref.imageUrl, servings });
       imported++;
     }
   } catch (err) {

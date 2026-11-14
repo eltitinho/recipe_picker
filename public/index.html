@@ -65,6 +65,15 @@
     #auth-screen form { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
     .publish-row { margin: 0.8rem 0; }
     .publish-row label { cursor: pointer; }
+    .servings-row { display: block; margin: 0.5rem 0; color: #555; }
+    .servings-row input { width: 60px; text-align: center; }
+    .recipe .servings { color: #888; font-size: 0.85rem; margin-left: 0.5rem; }
+    .shopping-recipe { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0; }
+    .shopping-recipe input[type="number"] { width: 60px; }
+    .shopping-recipe .shopping-persons { color: #555; font-size: 0.9rem; }
+    #shopping-generate { margin: 0.8rem 0; }
+    #shopping-list .shopping-item { display: flex; align-items: center; gap: 0.5rem; }
+    #shopping-list .shopping-item input:checked + span { text-decoration: line-through; color: #aaa; }
   </style>
 </head>
 <body>
@@ -100,6 +109,7 @@
       <button data-tab="tab-selection" class="active">Sélection de recettes</button>
       <button data-tab="tab-add-recipe">Ajout de recette</button>
       <button data-tab="tab-ingredients">Gestion des ingrédients</button>
+      <button data-tab="tab-shopping">🛒 Liste de courses</button>
     </nav>
 
     <section id="tab-selection" class="tab-panel active">
@@ -114,6 +124,9 @@
       <h2>Ajouter une recette</h2>
       <form id="recipe-form">
         <input type="text" id="recipe-name" placeholder="Nom de la recette" required>
+        <label class="servings-row">
+          Pour <input type="number" id="recipe-servings" min="1" step="1" value="4" required> personnes
+        </label>
         <label class="publish-row">
           <input type="checkbox" id="recipe-publish"> Publier dans le catalogue (visible par tous)
         </label>
@@ -130,6 +143,15 @@
         <button type="submit">Ajouter la recette</button>
       </form>
       <p class="error" id="recipe-error"></p>
+    </section>
+
+    <section id="tab-shopping" class="tab-panel">
+      <h2>Liste de courses</h2>
+      <p>Coche les recettes prévues et ajuste le nombre de personnes :</p>
+      <div id="shopping-recipes"></div>
+      <button id="shopping-generate">Générer la liste de courses</button>
+      <p class="error" id="shopping-error"></p>
+      <div id="shopping-list"></div>
     </section>
 
     <section id="tab-ingredients" class="tab-panel">

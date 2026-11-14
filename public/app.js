@@ -327,6 +327,11 @@ function renderRecipe(recipe, buttons = [], badge = null) {
   div.className = 'recipe';
   const title = el('strong', recipe.name);
   div.append(title);
+  if (recipe.servings) {
+    const servings = el('span', `👥 ${recipe.servings} pers.`);
+    servings.className = 'servings';
+    div.append(servings);
+  }
   if (recipe.imageUrl) {
     const img = el('img');
     img.src = recipe.imageUrl;
@@ -404,7 +409,131 @@ async function refreshMyRecipes() {
       },
     }], 'catalogue'));
   }
+  renderShoppingPicker();
 }
+
+// --- Liste de courses ---
+
+// Recettes affichées dans l'onglet courses (créées + choisies), index = dataset.index
+let shoppingRecipes = [];
+
+function renderShoppingPicker() {
+  shoppingRecipes = [...myRecipes.created, ...myRecipes.saved];
+  const container = document.getElementById('shopping-recipes');
+  container.innerHTML = '';
+  document.getElementById('shopping-list').innerHTML = '';
+  if (shoppingRecipes.length === 0) {
+    const empty = el('p', 'Aucune recette disponible. Crée-en une ou choisis-en dans le catalogue !');
+    empty.className = 'picker-empty';
+    container.append(empty);
+    return;
+  }
+  for (const [index, recipe] of shoppingRecipes.entries()) {
+    const row = el('div');
+    row.className = 'shopping-recipe';
+    row.dataset.index = index;
+
+    const label = el('label');
+    const checkbox = el('input');
+    checkbox.type = 'checkbox';
+    label.append(checkbox, ` ${recipe.name}`);
+
+    const persons = el('input');
+    persons.type = 'number';
+    persons.min = '1';
+    persons.step = '1';
+    persons.value = recipe.servings || 4;
+
+    const personsLabel = el('span', 'pers.');
+    personsLabel.className = 'shopping-persons';
+
+    row.append(label, persons, personsLabel);
+    container.append(row);
+  }
+}
+
+function roundQuantity(qty) {
+  const rounded = qty >= 10 ? Math.round(qty) : Math.round(qty * 10) / 10;
+  return rounded;
+}
+
+function generateShoppingList() {
+  const error = document.getElementById('shopping-error');
+  error.textContent = '';
+  const rows = [...document.querySelectorAll('#shopping-recipes .shopping-recipe')];
+  const selected = rows
+    .filter((row) => row.querySelector('input[type="checkbox"]').checked)
+    .map((row) => ({
+      recipe: shoppingRecipes[Number(row.dataset.index)],
+      persons: Number(row.querySelector('input[type="number"]').value) || 1,
+    }));
+
+  const container = document.getElementById('shopping-list');
+  container.innerHTML = '';
+  if (selected.length === 0) {
+    error.textContent = 'Coche au moins une recette.';
+    return;
+  }
+
+  const categoryById = new Map(allIngredients.map((ing) => [ing.id, ing.category]));
+  const withQty = new Map(); // id -> { name, unit, category, qty }
+  const withoutQty = new Map(); // id -> { name, category }
+
+  for (const { recipe, persons } of selected) {
+    const scale = persons / (recipe.servings || 4);
+    for (const ing of recipe.ingredients) {
+      const category = categoryById.get(ing.id) ?? 'Autre';
+      if (ing.quantity == null) {
+        if (!withoutQty.has(ing.id)) withoutQty.set(ing.id, { name: ing.name, category });
+        continue;
+      }
+      const current = withQty.get(ing.id) ?? { name: ing.name, unit: ing.unit, category, qty: 0 };
+      current.qty += ing.quantity * scale;
+      withQty.set(ing.id, current);
+    }
+  }
+
+  const items = [...withQty.values()].map((item) => ({ ...item, qty: roundQuantity(item.qty) }));
+  const groups = new Map();
+  for (const item of items) {
+    if (!groups.has(item.category)) groups.set(item.category, []);
+    groups.get(item.category).push(item);
+  }
+
+  const title = el('h2', '🛒 Ma liste de courses');
+  container.append(title);
+  for (const [category, categoryItems] of [...groups.entries()].sort(([a], [b]) => a.localeCompare(b, 'fr'))) {
+    const title = el('h3', category);
+    title.className = 'category';
+    container.append(title);
+    for (const item of categoryItems.sort((a, b) => a.name.localeCompare(b.name, 'fr'))) {
+      const row = el('div');
+      row.className = 'shopping-item';
+      const checkbox = el('input');
+      checkbox.type = 'checkbox';
+      const text = el('span', `${item.name} — ${item.qty} ${item.unit}`);
+      row.append(checkbox, text);
+      container.append(row);
+    }
+  }
+
+  if (withoutQty.size > 0) {
+    const title = el('h3', 'Selon les recettes (sans quantité)');
+    title.className = 'category';
+    container.append(title);
+    for (const item of [...withoutQty.values()].sort((a, b) => a.name.localeCompare(b.name, 'fr'))) {
+      const row = el('div');
+      row.className = 'shopping-item';
+      const checkbox = el('input');
+      checkbox.type = 'checkbox';
+      const text = el('span', item.name);
+      row.append(checkbox, text);
+      container.append(row);
+    }
+  }
+}
+
+document.getElementById('shopping-generate').onclick = generateShoppingList;
 
 let catalogCache = [];
 
@@ -525,6 +654,7 @@ document.getElementById('recipe-form').onsubmit = async (e) => {
   try {
     await api.post('/api/my/recipes', {
       name: document.getElementById('recipe-name').value,
+      servings: document.getElementById('recipe-servings').value,
       ingredients,
       steps,
       publish: document.getElementById('recipe-publish').checked,

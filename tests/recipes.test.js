@@ -40,6 +40,22 @@ describe('recipes', () => {
     expect(listed.find((r) => r.name === 'Salade').imageUrl).toBeNull();
   });
 
+  it('stocke les portions (servings), 4 par défaut', () => {
+    const custom = addRecipe(db, { name: 'Gratin', ingredients: [{ id: fromage.id }], servings: 6 });
+    expect(custom.servings).toBe(6);
+    const defaut = addRecipe(db, { name: 'Salade', ingredients: [{ id: tomate.id }] });
+    expect(defaut.servings).toBe(4);
+    expect(listRecipes(db).find((r) => r.name === 'Gratin').servings).toBe(6);
+    expect(listRecipes(db).find((r) => r.name === 'Salade').servings).toBe(4);
+  });
+
+  it('refuse des portions invalides', () => {
+    expect(() => addRecipe(db, { name: 'A', ingredients: [{ id: tomate.id }], servings: 0 })).toThrow('entier positif');
+    expect(() => addRecipe(db, { name: 'B', ingredients: [{ id: tomate.id }], servings: -2 })).toThrow('entier positif');
+    expect(() => addRecipe(db, { name: 'C', ingredients: [{ id: tomate.id }], servings: 2.5 })).toThrow('entier positif');
+    expect(() => addRecipe(db, { name: 'D', ingredients: [{ id: tomate.id }], servings: 'abc' })).toThrow('entier positif');
+  });
+
   it('refuse un nom vide', () => {
     expect(() => addRecipe(db, { name: '', ingredients: [{ id: pates.id }] })).toThrow('vide');
   });

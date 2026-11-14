@@ -57,6 +57,7 @@ function ensureColumn(db, table, column, ddl) {
 
 function migrateRecipesTables(db) {
   ensureColumn(db, 'recipes', 'image_url', 'image_url TEXT');
+  ensureColumn(db, 'recipes', 'servings', "servings INTEGER NOT NULL DEFAULT 4");
 }
 
 // Base catalogue : ingrédients partagés + recettes publiques.
