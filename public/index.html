@@ -187,7 +187,7 @@
       border: 1.5px solid var(--red-btn);
       box-shadow: none;
       padding: 0.25rem 0.7rem;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
     }
     button.delete:hover { background: var(--red-btn); color: var(--paper); box-shadow: none; transform: none; }
     button.secondary {
@@ -380,7 +380,7 @@
     #auth-screen h1 {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: 2.2rem;
+      font-size: 2.1rem;
       color: var(--red-deep);
       margin: 0 0 0.6rem;
       text-shadow: none;
@@ -486,6 +486,7 @@
           Pour <input type="number" id="recipe-servings" min="1" step="1" value="4" required> personnes
         </label>
         <div class="image-row">
+          <!-- impeccable-disable broken-image: src assigné par JS à la sélection d'image ; caché (hidden) tant qu'il est vide -->
           <img id="recipe-image-preview" class="recipe-img" alt="Aperçu de l'image" hidden>
           <input type="text" id="recipe-image-url" placeholder="URL de l'image (optionnel)">
           <label class="image-upload-label">

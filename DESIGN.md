@@ -17,11 +17,19 @@ colors:
   gold-line: "#D9B36C"
   border-soft: "#E4CFA8"
   placeholder: "#7A5F4A"
+  tab-text: "#F3D9B0"
+  glow-warm: "rgba(255,214,150,0.16)"
+  vignette-red: "rgba(46,6,8,0.35)"
 typography:
   display:
     fontFamily: "'Lilita One', 'Trebuchet MS', sans-serif"
+    fontSize: "2.1rem"
     fontWeight: 400
     letterSpacing: "0.02em"
+  display-mobile:
+    fontFamily: "'Lilita One', 'Trebuchet MS', sans-serif"
+    fontSize: "1.5rem"
+    fontWeight: 400
   headline:
     fontFamily: "'Lilita One', 'Trebuchet MS', sans-serif"
     fontSize: "1.55rem"
@@ -30,6 +38,17 @@ typography:
     fontFamily: "'Lilita One', 'Trebuchet MS', sans-serif"
     fontSize: "1.3rem"
     fontWeight: 400
+  subtitle:
+    fontFamily: "'Lilita One', 'Trebuchet MS', sans-serif"
+    fontSize: "1.25rem"
+    fontWeight: 400
+  category:
+    fontFamily: "'Lilita One', 'Trebuchet MS', sans-serif"
+    fontSize: "1.05rem"
+    fontWeight: 400
+    letterSpacing: "0.05em"
+  icon-figure:
+    fontSize: "2.5rem"
   body:
     fontFamily: "'Karla', system-ui, sans-serif"
     fontSize: "1rem"
@@ -40,7 +59,18 @@ typography:
     fontSize: "0.92rem"
     fontWeight: 800
     letterSpacing: "0.03em"
+  label-small:
+    fontFamily: "'Karla', system-ui, sans-serif"
+    fontSize: "0.85rem"
+    fontWeight: 800
+  badge-text:
+    fontFamily: "'Karla', system-ui, sans-serif"
+    fontSize: "0.72rem"
+    fontWeight: 800
+    letterSpacing: "0.06em"
 rounded:
+  focus: "4px"
+  choice: "6px"
   field: "8px"
   inset: "10px"
   panel: "12px"
