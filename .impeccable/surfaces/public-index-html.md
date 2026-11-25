@@ -8,7 +8,7 @@ related_targets: ["public/app.js"]
 # Surface brief — Chez Mamie app shell (public/index.html, public/app.js)
 
 ## Scope & mode
-Whole web app (auth screen + 5 tabs: Mes recettes, Catalogue, Gestion de recettes, Gestion des ingrédients, Liste de courses). Mode: **Operate**. All function, ids, classes, copy, and JS behavior preserved; the tab split moved existing DOM only (`tab-selection` → `tab-my-recipes` + `tab-catalog`).
+Whole web app (auth screen + 5 tabs whose chips read « Mes plats » (Mes recettes), « Les recettes de mamie » (Catalogue), « Mamie invente une recette » (Gestion de recettes), « Les petites mains » (Liste de courses), and « Le petit enfant » (user chip hiding Gestion des ingrédients + Déconnexion); each chip reveals its former name on hover). Mode: **Operate**. All function, ids, classes, copy, and JS behavior preserved; the tab split moved existing DOM only (`tab-selection` → `tab-my-recipes` + `tab-catalog`).
 
 ## Audience / job / constraints
 French-speaking home cooks; ingredient-first recipe picking and shopping-list generation. Vanilla HTML/CSS/JS, no build step; styles live inline in `index.html`; recipe rows are generated in `app.js` (`.recipe > strong + .servings + img/.recipe-img-placeholder + .badge + .ing-list + ol.steps + .recipe-actions`).
@@ -21,7 +21,7 @@ OWN-WORLD: one flat banquette-red ground (#A82118) edge to edge carrying everyth
 
 STORY: the cook walks into the red room, opens their recipes or the house catalogue (now separate rooms), picks tonight's dish, and leaves with a shopping list; the room feels like a friendly trattoria, not a database.
 
-FIRST VIEWPORT: flat red ground edge to edge; centered brand block — the cartoon-grandma medallion above « Chez Mamie » in Amatic SC hand-lettered capitals — with a ghost Déconnexion button at the right; five pill tabs right-aligned (active = gold with deep-red lettering, inactive = translucent dark-red with gold-tinted border); below, the « Mes recettes » gold heading closed by a double gold rule sits directly on the ground, each entry a dotted-leader menu line over the three-column spread. Primary action per tab stays the standard control.
+FIRST VIEWPORT: flat red ground edge to edge; a centered top bar of hand-lettered Amatic SC chips — painted words straight on the red, active chip underlined in gold, hover reveals the former name in a small Or Pâle caption; below it the centered brand sign (cartoon-grandma medallion above « Chez Mamie »); then the « Mes recettes » gold heading closed by a double gold rule sits directly on the ground, each entry a dotted-leader menu line over the three-column spread. Primary action per tab stays the standard control.
 
 FORM: seed: none (pinned) — « The kind of beige background should be removed and we should be directly into the red background. Find a more vibrant red that makes us feel in a very friendly restaurant. My recipies should be in another tab than the catalogue. Add a third color that goes well with these two (gold and red). » The world (friendly restaurant, all-red room) and the tab split are pinned by the brief; the third color (basil green) was chosen for the classic red-gold-green trattoria triad and the ingredient/freshness semantics.
 

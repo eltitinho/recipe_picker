@@ -96,14 +96,44 @@ document.getElementById('logout-btn').onclick = async () => {
 
 // --- Navigation par onglets ---
 
-document.querySelectorAll('nav.tabs button').forEach((btn) => {
-  btn.onclick = () => {
-    document.querySelectorAll('nav.tabs button').forEach((b) => b.classList.remove('active'));
-    document.querySelectorAll('section.tab-panel').forEach((s) => s.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.tab).classList.add('active');
-  };
+const tabChips = document.querySelectorAll('nav.tabs .chip[data-tab]');
+const userChipBtn = document.getElementById('user-chip-btn');
+const userMenu = document.getElementById('user-menu');
+
+function activateTab(tabId, chip) {
+  tabChips.forEach((b) => b.classList.remove('active'));
+  userChipBtn.classList.remove('active');
+  document.querySelectorAll('section.tab-panel').forEach((s) => s.classList.remove('active'));
+  if (chip) chip.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+tabChips.forEach((btn) => {
+  btn.onclick = () => activateTab(btn.dataset.tab, btn);
 });
+
+// --- Menu « Le petit enfant » (ingrédients + déconnexion) ---
+
+function closeUserMenu() {
+  userMenu.hidden = true;
+  userChipBtn.setAttribute('aria-expanded', 'false');
+}
+
+userChipBtn.onclick = (e) => {
+  e.stopPropagation();
+  const opening = userMenu.hidden;
+  userMenu.hidden = !opening;
+  userChipBtn.setAttribute('aria-expanded', String(opening));
+};
+
+document.addEventListener('click', (e) => {
+  if (!userMenu.hidden && !document.getElementById('user-chip').contains(e.target)) closeUserMenu();
+});
+
+document.querySelector('.user-menu [data-tab]').onclick = (e) => {
+  activateTab(e.currentTarget.dataset.tab, userChipBtn);
+  closeUserMenu();
+};
 
 // --- Utilitaires ---
 
@@ -386,7 +416,7 @@ async function refreshMyRecipes() {
   const container = document.getElementById('my-recipes');
   container.innerHTML = '';
   if (myRecipes.created.length === 0 && myRecipes.saved.length === 0) {
-    const empty = el('p', 'Aucune recette pour l\'instant. Crée-en une dans l\'onglet "Gestion de recettes" ou choisis-en dans l\'onglet "Catalogue" !');
+    const empty = el('p', 'Aucune recette pour l\'instant. Crée-en une dans l\'onglet "Mamie invente une recette" ou choisis-en dans l\'onglet "Les recettes de mamie" !');
     empty.className = 'picker-empty';
     container.append(empty);
   }

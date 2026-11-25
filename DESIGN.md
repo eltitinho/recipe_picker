@@ -20,7 +20,6 @@ colors:
   green-tint: "rgba(47,125,79,0.45)"
   error: "#FFC9BD"
   placeholder: "#7A5F4A"
-  tab-idle: "rgba(46,6,8,0.32)"
 typography:
   brand:
     fontFamily: "'Amatic SC', 'Trebuchet MS', cursive"
@@ -37,6 +36,16 @@ typography:
     fontSize: "1.9rem"
     fontWeight: 700
     letterSpacing: "0.05em"
+  chip:
+    fontFamily: "'Amatic SC', 'Trebuchet MS', cursive"
+    fontSize: "1.55rem"
+    fontWeight: 700
+    letterSpacing: "0.06em"
+  chip-mobile:
+    fontFamily: "'Amatic SC', 'Trebuchet MS', cursive"
+    fontSize: "1.25rem"
+    fontWeight: 700
+    letterSpacing: "0.06em"
   display:
     fontFamily: "'Lilita One', 'Trebuchet MS', sans-serif"
     fontSize: "2.1rem"
@@ -106,16 +115,16 @@ components:
     backgroundColor: "transparent"
     textColor: "{colors.gold-soft}"
     rounded: "{rounded.pill}"
-  nav-tab:
-    backgroundColor: "rgba(46,6,8,0.32)"
-    textColor: "{colors.gold-soft}"
-    border: "1.5px solid {colors.gold-line}"
-    rounded: "{rounded.pill}"
-    typography: "display"
-  nav-tab-active:
-    backgroundColor: "{colors.gold}"
-    textColor: "{colors.red-dark}"
-    border: "1.5px solid {colors.gold}"
+  nav-chip:
+    backgroundColor: "transparent"
+    textColor: "{colors.cream}"
+    border: "3px solid transparent (bottom only)"
+    rounded: "0"
+    typography: "chip"
+  nav-chip-active:
+    backgroundColor: "transparent"
+    textColor: "{colors.cream}"
+    border: "3px solid {colors.gold} (bottom only)"
   section:
     backgroundColor: "transparent"
     textColor: "{colors.cream}"
@@ -144,7 +153,7 @@ Chez Mamie is a vibrant restaurant dining room you cook from: one flat banquette
 
 The signature move is the menu line: every recipe entry sets its name in chunky display lettering and runs a dotted leader across the line to the portion count, exactly like a dish and its price on a printed menu. Section headings close with a double gold rule, the way menu sections are ruled off. The auth screen is the restaurant's door: the same flat red, straight into the room.
 
-Density stays working-app dense; controls stay standard (pill tabs, pill buttons, familiar fields). Color does real jobs: red is the room, gold is the brass that serves, green is everything fresh from the kitchen.
+Density stays working-app dense; controls stay standard (painted-word tabs, pill buttons, familiar fields). Color does real jobs: red is the room, gold is the brass that serves, green is everything fresh from the kitchen.
 
 **Key Characteristics:**
 - One flat banquette-red ground (#A82118) edge to edge — the room itself, no panels, no paper, no page gradient
@@ -165,7 +174,7 @@ The palette is drenched: the red family owns ground and surfaces, gold owns serv
 ### Secondary
 - **Or Moutarde** (#E8A020): the brass — double rules under section headings, focus rings, scrollbars, text selection, primary buttons, the active tab. Always paired with dark ink when it carries text (ink on gold ≈7.4:1).
 - **Or Vif** (#F4B23A): primary-button hover.
-- **Or Pâle** (#F6D9A0): large secondary display text on red (sub-headings, portion counts, tab lettering), gold-tinted hairlines at 45%/28% alpha.
+- **Or Pâle** (#F6D9A0): large secondary display text on red (sub-headings, portion counts, chip hover and old-name captions), gold-tinted hairlines at 45%/28% alpha.
 
 ### Tertiary
 - **Vert Basilic** (#2F7D4F): the fresh third color — ingredient tags, the « catalogue » provenance badge, checked ingredient rows (at 45% alpha), checked step chips, checkbox accent. Always carries cream text (≈4.7:1), never body paragraphs.
@@ -177,7 +186,7 @@ The palette is drenched: the red family owns ground and surfaces, gold owns serv
 - **Champ Clair** (#FFFBF2): input fields and unselected step chips — the order slip you write on, with Encre Brune text.
 - **Encre Brune** (#2B1A12): text on gold and on light fields, never pure black.
 - **Erreur Saumon** (#FFC9BD): error text on red (≈4.8:1 on banquette).
-- **Ombre de Salle** (rgba(46,6,8,0.32), 0.5 on hover): the room's own shadow as a tint — inactive tab pills recede into it.
+
 
 ### Named Rules
 **The Red Is the Room Rule.** Everything is the red room: one flat banquette red carries the whole page, insets go deeper still. No panel, card, or cover sits between the content and the room. No cream, white, or gray surface ever ships — cream exists only as text, and light fields only as small writing slips.
@@ -191,13 +200,14 @@ The palette is drenched: the red family owns ground and surfaces, gold owns serv
 ## Typography
 
 **Display Font:** Lilita One (with 'Trebuchet MS' fallback) — self-hosted OFL woff2 in `public/fonts/`
-**Brand Font:** Amatic SC 700 (with 'Trebuchet MS' fallback) — self-hosted OFL woff2 in `public/fonts/` — only for the « Chez Mamie » wordmark
+**Brand Font:** Amatic SC 700 (with 'Trebuchet MS' fallback) — self-hosted OFL woff2 in `public/fonts/` — for the « Chez Mamie » wordmark and the top-bar chips
 **Body Font:** Karla variable 200–800 (with system-ui fallback) — self-hosted OFL woff2 in `public/fonts/`
 
-**Character:** Amatic SC is the hand-painted sign above the door — tall, narrow, cozy capitals for the brand name alone. Lilita One is the restaurant's painted lettering — round, plump, unhurried; Karla is the waiter's clear handwriting for everything functional. Weights in Karla do the emphasis work (700/800), since Lilita One exists only at 400.
+**Character:** Amatic SC is the hand-painted sign above the door — tall, narrow, cozy capitals for the brand name and the top-bar chips, as if mamie lettered the menu herself. Lilita One is the restaurant's painted lettering — round, plump, unhurried; Karla is the waiter's clear handwriting for everything functional. Weights in Karla do the emphasis work (700/800), since Lilita One exists only at 400.
 
 ### Hierarchy
 - **Brand** (Amatic SC 700, 2.3rem, 0.05em tracking): the « Chez Mamie » wordmark under the medallion, centered; 3.1rem on the auth screen, 1.9rem on mobile.
+- **Chip** (Amatic SC 700, 1.55rem, 0.06em tracking): the top-bar chips — painted words straight on the red; 1.25rem on mobile.
 - **Headline** (400, 1.55rem): section headings in Or Moutarde, closed by a 4px double gold rule.
 - **Title** (400, 1.3rem): recipe names in menu lines, in Crème; 1.25rem in Or Pâle for sub-headings; category labels at 1.05rem uppercase with 0.05em tracking.
 - **Body** (400, 1rem, 1.45): all functional text on red.
@@ -208,7 +218,7 @@ The palette is drenched: the red family owns ground and surfaces, gold owns serv
 
 ## Layout
 
-Single column, max-width 1000px, page padding 1.25rem. The topbar (brand + user) sits directly on the red ground; the five tabs (Mes recettes, Catalogue, Gestion de recettes, Gestion des ingrédients, Liste de courses) form a right-aligned pill row on the red ground just under it, and the active section's content lies directly on the same ground — no panel, rim, or shadow in between. Section headings take more space above than below; recipe entries separate with dashed gold-tinted rules, not boxes. On desktop (≥768px) each recipe entry composes in three columns under its menu line — framed photo left, ingredients middle, preparation right — the columns ruled apart by a 4px double gold vertical line (the horizontal section rule turned upright). Ingredient pickers use an auto-fill grid (minmax 220px). Below 768px the recipe columns stack (photo, ingredients, steps) and the vertical rules lift; below 640px: page padding 0.8rem, tabs wrap two-per-row, the brand takes its own line.
+Single column, max-width 1000px, page padding 1.25rem. The top bar comes first: a centered row of chips — painted words in Amatic SC straight on the red ground, no buttons, the active one underlined in Or Moutarde — then the brand sign (medallion over wordmark) centered just beneath. The chips are « Mes plats », « Les recettes de mamie », « Mamie invente une recette », « Les petites mains » and « Le petit enfant »; each reveals its former functional name (Mes recettes, Catalogue, Gestion de recettes, Liste de courses, the username) in a small Or Pâle caption on hover, and « Le petit enfant » hides a menu with Gestion des ingrédients and Déconnexion. The active section's content lies directly on the same ground — no panel, rim, or shadow in between. Section headings take more space above than below; recipe entries separate with dashed gold-tinted rules, not boxes. On desktop (≥768px) each recipe entry composes in three columns under its menu line — framed photo left, ingredients middle, preparation right — the columns ruled apart by a 4px double gold vertical line (the horizontal section rule turned upright). Ingredient pickers use an auto-fill grid (minmax 220px). Below 768px the recipe columns stack (photo, ingredients, steps) and the vertical rules lift; below 640px: page padding 0.8rem, chips wrap centered and the old-name captions drop.
 
 ## Elevation & Depth
 
@@ -223,7 +233,7 @@ Depth is soft, low, and rare: the room is flat, so shadow belongs only to small 
 
 ## Shapes
 
-Pills for anything clickable-small (buttons, tabs, tags, chips, badges); 8–10px radii for fields and insets. Separators are dashed or dotted (menu leaders, entry rules), never solid hairlines.
+Pills for anything clickable-small (buttons, tags, ingredient chips, badges) — but the top-bar tabs are painted words, not pills; 8–10px radii for fields and insets. Separators are dashed or dotted (menu leaders, entry rules), never solid hairlines.
 
 ## Components
 
@@ -246,7 +256,7 @@ Pills for anything clickable-small (buttons, tabs, tags, chips, badges); 8–10p
 - **Focus:** gold border plus a 3px gold ring at 35% opacity; caret in Rouge Salle.
 
 ### Navigation
-- Pill tabs on the red ground, right-aligned under the topbar: inactive tabs translucent dark-red with a 1.5px gold-tinted border and Or Pâle display lettering; the active tab turns Or Moutarde with Rouge Foncé (#5F100B) lettering and a soft button shadow. Mobile: two-per-row pills.
+- Painted-word chips on the red ground, centered above the brand sign: Amatic SC 700 Crème lettering with no button chrome at all; hover turns the word Or Pâle and reveals the chip's former name in a small caption beneath; the active chip keeps a 3px Or Moutarde underline. « Le petit enfant » opens a Rouge Foncé (#5F100B) menu (gold hairline, soft shadow) holding Gestion des ingrédients and Déconnexion, and takes the underline itself when the ingredients section is open. Mobile: chips wrap centered, captions drop.
 
 ### Menu Line (signature)
 - **Style:** recipe name in Title display type (Crème), dotted 2px leader (40% Or Pâle) running to the portion count in Or Pâle; name and count carry a Rouge Banquette background to cut the dots. Entries separate with a 1px dashed gold-tinted rule.

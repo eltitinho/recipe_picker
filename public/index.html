@@ -122,10 +122,9 @@
     }
     section.tab-panel > h2:first-child { margin-top: 0; }
 
-    /* ——— Barre supérieure : médaillon + nom, centrés ——— */
-    header.topbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; }
+    /* ——— Barre supérieure : les onglets d'abord, l'enseigne en dessous ——— */
+    header.topbar { display: flex; flex-direction: column; align-items: center; gap: 0.55rem; }
     h1.brand {
-      grid-column: 2;
       margin: 0;
       display: flex;
       flex-direction: column;
@@ -147,30 +146,86 @@
       line-height: 1;
       text-shadow: 0 2px 0 rgba(46,6,8,0.35);
     }
-    .user-info { justify-self: end; display: flex; align-items: center; gap: 0.6rem; color: var(--cream); font-weight: 700; }
 
-    /* ——— Onglets : pastilles en haut à droite ——— */
-    nav.tabs { display: flex; gap: 0.45rem; justify-content: flex-end; flex-wrap: wrap; margin: 0.9rem 0 1rem; }
-    nav.tabs button {
+    /* ——— Onglets : mots peints à même la banquette, soulignés quand actifs ——— */
+    nav.tabs {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.4rem 1.9rem;
+      margin: 0;
+      padding-bottom: 0.95rem; /* la place des légendes d'ancien nom au survol */
+    }
+    nav.tabs .chip {
+      position: relative;
       flex: none;
-      padding: 0.5rem 1rem;
-      border: 1.5px solid var(--gold-line);
-      border-radius: 999px;
-      background: rgba(46,6,8,0.32);
-      color: var(--gold-soft);
-      font-family: var(--font-display);
-      font-size: 0.95rem;
-      letter-spacing: 0.02em;
-      cursor: pointer;
+      padding: 0 0 0.22rem;
+      border: none;
+      border-bottom: 3px solid transparent;
+      border-radius: 0;
+      background: none;
       box-shadow: none;
+      color: var(--cream);
+      font-family: var(--font-brand);
+      font-weight: 700;
+      font-size: 1.55rem;
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+      cursor: pointer;
+      text-shadow: 0 2px 0 rgba(46,6,8,0.3);
     }
-    nav.tabs button:hover { background: rgba(46,6,8,0.5); color: var(--cream); transform: none; }
-    nav.tabs button.active {
-      background: var(--gold);
-      color: var(--red-dark);
-      border-color: var(--gold);
-      box-shadow: 0 3px 10px rgba(46,6,8,0.3);
+    nav.tabs .chip:hover { background: none; box-shadow: none; transform: none; color: var(--gold-soft); }
+    nav.tabs .chip.active { color: var(--cream); border-bottom-color: var(--gold); }
+    .chip-old {
+      position: absolute;
+      top: calc(100% + 0.35rem);
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-family: var(--font-body);
+      font-weight: 800;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--gold-soft);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      pointer-events: none;
     }
+    nav.tabs .chip:hover .chip-old, nav.tabs .chip:focus-visible .chip-old { opacity: 1; }
+
+    /* ——— Chip « Le petit enfant » : le compte et les ingrédients s'y cachent ——— */
+    .user-chip { position: relative; }
+    .user-menu {
+      position: absolute;
+      top: calc(100% + 0.6rem);
+      right: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 13rem;
+      padding: 0.5rem;
+      background: var(--red-dark);
+      border: 1.5px solid var(--gold-line);
+      border-radius: 10px;
+      box-shadow: 0 5px 14px rgba(46,6,8,0.35);
+    }
+    .user-menu-item {
+      padding: 0.45rem 0.6rem;
+      border: none;
+      border-radius: 6px;
+      background: none;
+      box-shadow: none;
+      text-align: left;
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.92rem;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+    }
+    .user-menu-item:hover { background: rgba(232,160,32,0.18); color: var(--gold-bright); transform: none; box-shadow: none; }
 
     /* ——— Panneaux : le contenu repose directement sur le rouge de la salle ——— */
     section.tab-panel {
@@ -232,8 +287,7 @@
       font-size: 0.85rem;
     }
     button.secondary:hover { background: rgba(232,160,32,0.2); color: var(--gold-bright); box-shadow: none; transform: none; }
-    .user-info button.secondary { border-color: rgba(255,246,232,0.65); color: var(--cream); }
-    .user-info button.secondary:hover { background: rgba(255,246,232,0.14); color: var(--cream); }
+
 
     ul { list-style: none; padding: 0; }
     li { padding: 0.3rem 0; display: flex; align-items: center; gap: 0.5rem; }
@@ -480,13 +534,12 @@
     /* ——— Mobile ——— */
     @media (max-width: 640px) {
       body { padding: 0.8rem; }
-      header.topbar { grid-template-columns: 1fr; justify-items: center; }
-      h1.brand { grid-column: 1; }
-      .user-info { justify-self: center; }
       .brand-logo { height: 3.2rem; width: 3.2rem; }
       .brand-name { font-size: 1.9rem; }
-      nav.tabs { justify-content: flex-start; }
-      nav.tabs button { flex: 1 1 46%; font-size: 0.92rem; }
+      nav.tabs { gap: 0.35rem 1.15rem; }
+      nav.tabs .chip { font-size: 1.25rem; }
+      .chip-old { display: none; }
+      .user-menu { right: auto; left: 50%; transform: translateX(-50%); }
       h2 { font-size: 1.3rem; }
       .checkbox-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
       #auth-screen { margin: 2rem auto; }
@@ -515,20 +568,21 @@
 
   <div id="app-screen" hidden>
     <header class="topbar">
+      <nav class="tabs">
+        <button class="chip active" data-tab="tab-my-recipes"><span class="chip-label">Mes plats</span><span class="chip-old">Mes recettes</span></button>
+        <button class="chip" data-tab="tab-catalog"><span class="chip-label">Les recettes de mamie</span><span class="chip-old">Catalogue</span></button>
+        <button class="chip" data-tab="tab-add-recipe"><span class="chip-label">Mamie invente une recette</span><span class="chip-old">Gestion de recettes</span></button>
+        <button class="chip" data-tab="tab-shopping"><span class="chip-label">Les petites mains</span><span class="chip-old">Liste de courses</span></button>
+        <div class="user-chip" id="user-chip">
+          <button class="chip" id="user-chip-btn" aria-haspopup="true" aria-expanded="false"><span class="chip-label">Le petit enfant</span><span class="chip-old" id="current-user"></span></button>
+          <div class="user-menu" id="user-menu" hidden>
+            <button class="user-menu-item" data-tab="tab-ingredients">Gestion des ingrédients</button>
+            <button class="user-menu-item" id="logout-btn">Déconnexion</button>
+          </div>
+        </div>
+      </nav>
       <h1 class="brand"><img class="brand-logo" src="logo.png" alt=""><span class="brand-name">Chez Mamie</span></h1>
-      <div class="user-info">
-        <span id="current-user"></span>
-        <button id="logout-btn" class="secondary">Déconnexion</button>
-      </div>
     </header>
-
-    <nav class="tabs">
-      <button data-tab="tab-my-recipes" class="active">Mes recettes</button>
-      <button data-tab="tab-catalog">Catalogue</button>
-      <button data-tab="tab-add-recipe">Gestion de recettes</button>
-      <button data-tab="tab-ingredients">Gestion des ingrédients</button>
-      <button data-tab="tab-shopping">🛒 Liste de courses</button>
-    </nav>
 
     <section id="tab-my-recipes" class="tab-panel active">
       <h2>Mes recettes</h2>

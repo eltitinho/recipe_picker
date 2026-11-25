@@ -12,8 +12,9 @@
       "ink": { "role": "neutral", "displayName": "Encre Brune", "canonical": "#2B1A12", "tonalRamp": ["oklch(16% 0.02 50)", "oklch(24% 0.03 55)", "oklch(33% 0.04 60)", "oklch(45% 0.05 65)", "oklch(58% 0.05 70)", "oklch(72% 0.04 75)", "oklch(85% 0.03 80)", "oklch(95% 0.015 82)"] }
     },
     "typographyMeta": {
-      "brand": { "displayName": "Brand", "purpose": "The « Chez Mamie » wordmark alone, under the medallion. Amatic SC 700, self-hosted OFL." },
-      "display": { "displayName": "Display", "purpose": "Section headings, tab labels, recipe names. Lilita One 400, self-hosted OFL." },
+      "brand": { "displayName": "Brand", "purpose": "The « Chez Mamie » wordmark under the medallion. Amatic SC 700, self-hosted OFL." },
+      "chip": { "displayName": "Chip", "purpose": "Top-bar chips: painted words straight on the red, active underlined in gold, old name revealed on hover. Amatic SC 700." },
+      "display": { "displayName": "Display", "purpose": "Section headings and recipe names. Lilita One 400, self-hosted OFL." },
       "body": { "displayName": "Body", "purpose": "All functional text on red. Karla variable 200-800, self-hosted OFL." }
     },
     "shadows": [
@@ -55,12 +56,12 @@
       "css": ".ds-input { padding: 0.5rem 0.65rem; border: 1.5px solid rgba(232,160,32,0.55); border-radius: 8px; background: var(--field); color: var(--ink); font-family: var(--font-body); font-size: 0.95rem; caret-color: var(--red); } .ds-input::placeholder { color: #7A5F4A; } .ds-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,160,32,0.35); outline: none; }"
     },
     {
-      "name": "Folder Tabs",
+      "name": "Painted Chips",
       "kind": "nav",
-      "refersTo": "nav-tab",
-      "description": "Section navigation on the red ground; the active tab turns gold.",
-      "html": "<nav class=\"ds-tabs\"><button class=\"ds-tab ds-tab-active\">Mes recettes</button><button class=\"ds-tab\">Catalogue</button></nav>",
-      "css": ".ds-tabs { display: flex; gap: 0.45rem; } .ds-tab { flex: none; padding: 0.5rem 1rem; border: 1.5px solid var(--gold-line); border-radius: 999px; background: rgba(46,6,8,0.32); color: var(--gold-soft); font-family: var(--font-display); font-size: 0.95rem; letter-spacing: 0.02em; cursor: pointer; } .ds-tab:hover { background: rgba(46,6,8,0.5); color: var(--cream); } .ds-tab-active { background: var(--gold); color: var(--red-dark); border-color: var(--gold); box-shadow: 0 3px 10px rgba(46,6,8,0.3); } .ds-tab:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }"
+      "refersTo": "nav-chip",
+      "description": "Section navigation as hand-lettered words straight on the red ground, centered above the brand sign; the active chip takes a gold underline, hover turns the word Or Pâle and reveals the former name beneath.",
+      "html": "<nav class=\"ds-tabs\"><button class=\"ds-tab ds-tab-active\">Mes plats</button><button class=\"ds-tab\">Les recettes de mamie</button></nav>",
+      "css": ".ds-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.4rem 1.9rem; } .ds-tab { position: relative; flex: none; padding: 0 0 0.22rem; border: none; border-bottom: 3px solid transparent; border-radius: 0; background: none; box-shadow: none; color: var(--cream); font-family: var(--font-brand); font-weight: 700; font-size: 1.55rem; letter-spacing: 0.06em; cursor: pointer; } .ds-tab:hover { color: var(--gold-soft); } .ds-tab-active { border-bottom-color: var(--gold); } .ds-tab:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }"
     },
     {
       "name": "Section on the Ground",
