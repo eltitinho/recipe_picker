@@ -1,4 +1,4 @@
-# 🍳 Recipe Picker
+# 👵 Chez Mamie
 
 Application web multi-utilisateurs pour choisir une recette en fonction des
 ingrédients disponibles.

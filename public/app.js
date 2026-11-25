@@ -386,7 +386,7 @@ async function refreshMyRecipes() {
   const container = document.getElementById('my-recipes');
   container.innerHTML = '';
   if (myRecipes.created.length === 0 && myRecipes.saved.length === 0) {
-    const empty = el('p', 'Aucune recette pour l\'instant. Crée-en une dans l\'onglet "Ajout de recette" ou choisis-en dans le catalogue ci-dessous !');
+    const empty = el('p', 'Aucune recette pour l\'instant. Crée-en une dans l\'onglet "Gestion de recettes" ou choisis-en dans l\'onglet "Catalogue" !');
     empty.className = 'picker-empty';
     container.append(empty);
   }

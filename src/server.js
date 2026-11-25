@@ -223,6 +223,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const app = createApp(manager);
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
-    console.log(`Recipe picker démarré sur http://localhost:${port}`);
+    console.log(`Chez Mamie démarré sur http://localhost:${port}`);
   });
 }

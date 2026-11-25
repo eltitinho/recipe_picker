@@ -1,25 +1,25 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-24T23:45:00Z",
-  "title": "Design System: Recipe Picker",
+  "generatedAt": "2026-11-25T00:15:00Z",
+  "title": "Design System: Chez Mamie",
   "extensions": {
     "colorMeta": {
-      "red": { "role": "primary", "displayName": "Rouge Salle", "canonical": "#C1272D", "tonalRamp": ["oklch(28% 0.09 25)", "oklch(36% 0.13 25)", "oklch(44% 0.17 25)", "oklch(52% 0.19 25)", "oklch(60% 0.18 25)", "oklch(70% 0.14 25)", "oklch(82% 0.08 25)", "oklch(93% 0.03 25)"] },
-      "red-btn": { "role": "primary", "displayName": "Rouge Service", "canonical": "#A91F24", "tonalRamp": ["oklch(24% 0.08 25)", "oklch(32% 0.12 25)", "oklch(40% 0.16 25)", "oklch(48% 0.18 25)", "oklch(58% 0.17 25)", "oklch(69% 0.13 25)", "oklch(81% 0.07 25)", "oklch(93% 0.03 25)"] },
+      "red": { "role": "primary", "displayName": "Rouge Salle", "canonical": "#CE3A24", "tonalRamp": ["oklch(26% 0.08 25)", "oklch(33% 0.11 25)", "oklch(40% 0.15 26)", "oklch(47% 0.18 27)", "oklch(54% 0.19 28)", "oklch(62% 0.17 28)", "oklch(72% 0.12 30)", "oklch(85% 0.06 35)", "oklch(94% 0.02 40)"], "purpose": "Bright accent red kept only for small marks on light fields (input caret)." },
+      "red-panel": { "role": "primary", "displayName": "Rouge Banquette", "canonical": "#A82118", "tonalRamp": ["oklch(22% 0.06 25)", "oklch(28% 0.09 25)", "oklch(34% 0.12 26)", "oklch(40% 0.15 26)", "oklch(48% 0.17 27)", "oklch(58% 0.17 28)", "oklch(70% 0.12 30)", "oklch(84% 0.06 35)", "oklch(94% 0.02 40)"], "purpose": "The single flat page ground — the whole room, edge to edge, no panels." },
       "gold": { "role": "secondary", "displayName": "Or Moutarde", "canonical": "#E8A020", "tonalRamp": ["oklch(30% 0.06 75)", "oklch(42% 0.09 75)", "oklch(55% 0.13 75)", "oklch(68% 0.16 75)", "oklch(78% 0.15 78)", "oklch(86% 0.11 80)", "oklch(92% 0.06 82)", "oklch(97% 0.02 85)"] },
-      "paper": { "role": "neutral", "displayName": "Papier Menu", "canonical": "#FFF7EA", "tonalRamp": ["oklch(35% 0.04 70)", "oklch(48% 0.05 72)", "oklch(60% 0.06 74)", "oklch(72% 0.06 78)", "oklch(83% 0.05 80)", "oklch(91% 0.04 83)", "oklch(96% 0.025 85)", "oklch(99% 0.01 88)"] },
+      "green": { "role": "tertiary", "displayName": "Vert Basilic", "canonical": "#2F7D4F", "tonalRamp": ["oklch(22% 0.04 150)", "oklch(30% 0.06 150)", "oklch(38% 0.08 150)", "oklch(47% 0.10 150)", "oklch(56% 0.11 150)", "oklch(66% 0.11 150)", "oklch(77% 0.09 150)", "oklch(88% 0.05 150)", "oklch(95% 0.02 150)"] },
+      "cream": { "role": "neutral", "displayName": "Crème", "canonical": "#FFF6E8", "tonalRamp": ["oklch(35% 0.04 70)", "oklch(48% 0.05 72)", "oklch(60% 0.06 74)", "oklch(72% 0.06 78)", "oklch(83% 0.05 80)", "oklch(91% 0.04 83)", "oklch(96% 0.025 85)", "oklch(99% 0.01 88)"] },
       "ink": { "role": "neutral", "displayName": "Encre Brune", "canonical": "#2B1A12", "tonalRamp": ["oklch(16% 0.02 50)", "oklch(24% 0.03 55)", "oklch(33% 0.04 60)", "oklch(45% 0.05 65)", "oklch(58% 0.05 70)", "oklch(72% 0.04 75)", "oklch(85% 0.03 80)", "oklch(95% 0.015 82)"] }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Brand, section headings, tab labels, recipe names. Lilita One 400, self-hosted OFL." },
-      "body": { "displayName": "Body", "purpose": "All functional text on paper. Karla variable 200-800, self-hosted OFL." }
+      "brand": { "displayName": "Brand", "purpose": "The « Chez Mamie » wordmark alone, under the medallion. Amatic SC 700, self-hosted OFL." },
+      "display": { "displayName": "Display", "purpose": "Section headings, tab labels, recipe names. Lilita One 400, self-hosted OFL." },
+      "body": { "displayName": "Body", "purpose": "All functional text on red. Karla variable 200-800, self-hosted OFL." }
     },
     "shadows": [
-      { "name": "panel-float", "value": "0 14px 34px rgba(46,6,8,0.4)", "purpose": "Cream panels floating over the red ground." },
-      { "name": "cover-float", "value": "0 22px 55px rgba(46,6,8,0.5)", "purpose": "Auth menu-cover card." },
       { "name": "button-rest", "value": "0 3px 10px rgba(46,6,8,0.3)", "purpose": "Primary buttons at rest." },
       { "name": "button-hover", "value": "0 5px 14px rgba(46,6,8,0.35)", "purpose": "Primary buttons on hover, with translateY(-1px)." },
-      { "name": "framed-photo", "value": "0 4px 12px rgba(46,6,8,0.18)", "purpose": "Recipe images inside panels." }
+      { "name": "framed-photo", "value": "0 4px 12px rgba(46,6,8,0.18)", "purpose": "Recipe images on the red ground." }
     ],
     "motion": [
       { "name": "panel-in", "value": "0.38s cubic-bezier(0.16,1,0.3,1)", "purpose": "Single authored moment: tab panel entrance (opacity + 10px rise), disabled under prefers-reduced-motion." },
@@ -34,87 +34,89 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Main action on cream panels: pill, Rouge Service, Label typography.",
+      "description": "Main action on the red ground: gold pill, Encre Brune label, hover lifts to Or Vif.",
       "html": "<button class=\"ds-btn-primary\">Générer la liste de courses</button>",
-      "css": ".ds-btn-primary { padding: 0.55rem 1.1rem; border: none; border-radius: 999px; background: var(--red-btn); color: var(--paper); font-family: var(--font-body); font-weight: 800; font-size: 0.92rem; letter-spacing: 0.03em; cursor: pointer; box-shadow: 0 3px 10px rgba(46,6,8,0.3); transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease; } .ds-btn-primary:hover { background: var(--red-deep); transform: translateY(-1px); box-shadow: 0 5px 14px rgba(46,6,8,0.35); } .ds-btn-primary:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }"
+      "css": ".ds-btn-primary { padding: 0.55rem 1.1rem; border: none; border-radius: 999px; background: var(--gold); color: var(--ink); font-family: var(--font-body); font-weight: 800; font-size: 0.92rem; letter-spacing: 0.03em; cursor: pointer; box-shadow: 0 3px 10px rgba(46,6,8,0.3); transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease; } .ds-btn-primary:hover { background: var(--gold-bright); transform: translateY(-1px); box-shadow: 0 5px 14px rgba(46,6,8,0.35); } .ds-btn-primary:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }"
     },
     {
       "name": "Ghost Button",
       "kind": "button",
       "refersTo": "button-ghost",
-      "description": "Secondary and destructive actions: transparent pill with a 1.5px border that fills on hover.",
+      "description": "Secondary and destructive actions: transparent pill with a 1.5px gold- or cream-tinted border that fills with a translucent tint on hover.",
       "html": "<button class=\"ds-btn-ghost\">Annuler la modification</button>",
-      "css": ".ds-btn-ghost { padding: 0.45rem 1rem; border: 1.5px solid var(--ink-soft); border-radius: 999px; background: transparent; color: var(--ink-soft); font-family: var(--font-body); font-weight: 800; font-size: 0.85rem; letter-spacing: 0.03em; cursor: pointer; } .ds-btn-ghost:hover { background: var(--paper-soft); color: var(--ink); } .ds-btn-ghost:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }"
+      "css": ".ds-btn-ghost { padding: 0.45rem 1rem; border: 1.5px solid rgba(246,217,160,0.55); border-radius: 999px; background: transparent; color: var(--gold-soft); font-family: var(--font-body); font-weight: 800; font-size: 0.85rem; letter-spacing: 0.03em; cursor: pointer; } .ds-btn-ghost:hover { background: rgba(232,160,32,0.2); color: var(--gold-bright); } .ds-btn-ghost:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }"
     },
     {
       "name": "Text Field",
       "kind": "input",
       "refersTo": "input",
-      "description": "Standard field on paper: sandy border, gold focus ring, red caret.",
+      "description": "The order slip: light field on red with a gold-tinted border, gold focus ring, red caret.",
       "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Rechercher un ingrédient...\">",
-      "css": ".ds-input { padding: 0.5rem 0.65rem; border: 1.5px solid var(--border-soft); border-radius: 8px; background: var(--paper-input); color: var(--ink); font-family: var(--font-body); font-size: 0.95rem; caret-color: var(--red-btn); } .ds-input::placeholder { color: #7A5F4A; } .ds-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,160,32,0.3); outline: none; }"
+      "css": ".ds-input { padding: 0.5rem 0.65rem; border: 1.5px solid rgba(232,160,32,0.55); border-radius: 8px; background: var(--field); color: var(--ink); font-family: var(--font-body); font-size: 0.95rem; caret-color: var(--red); } .ds-input::placeholder { color: #7A5F4A; } .ds-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,160,32,0.35); outline: none; }"
     },
     {
       "name": "Folder Tabs",
       "kind": "nav",
       "refersTo": "nav-tab",
-      "description": "Section navigation on the red ground; the active tab turns paper and merges into the panel.",
-      "html": "<nav class=\"ds-tabs\"><button class=\"ds-tab ds-tab-active\">Sélection de recettes</button><button class=\"ds-tab\">Liste de courses</button></nav>",
-      "css": ".ds-tabs { display: flex; gap: 0.4rem; } .ds-tab { flex: 1; padding: 0.65rem 0.8rem 0.75rem; border: none; border-radius: 10px 10px 0 0; background: rgba(46,6,8,0.38); color: #F3D9B0; font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.02em; cursor: pointer; } .ds-tab:hover { background: rgba(46,6,8,0.55); color: var(--paper); } .ds-tab-active { background: var(--paper); color: var(--red-deep); box-shadow: 0 -6px 14px rgba(46,6,8,0.18); } .ds-tab:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }"
+      "description": "Section navigation on the red ground; the active tab turns gold.",
+      "html": "<nav class=\"ds-tabs\"><button class=\"ds-tab ds-tab-active\">Mes recettes</button><button class=\"ds-tab\">Catalogue</button></nav>",
+      "css": ".ds-tabs { display: flex; gap: 0.45rem; } .ds-tab { flex: none; padding: 0.5rem 1rem; border: 1.5px solid var(--gold-line); border-radius: 999px; background: rgba(46,6,8,0.32); color: var(--gold-soft); font-family: var(--font-display); font-size: 0.95rem; letter-spacing: 0.02em; cursor: pointer; } .ds-tab:hover { background: rgba(46,6,8,0.5); color: var(--cream); } .ds-tab-active { background: var(--gold); color: var(--red-dark); border-color: var(--gold); box-shadow: 0 3px 10px rgba(46,6,8,0.3); } .ds-tab:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }"
     },
     {
-      "name": "Menu Panel",
+      "name": "Section on the Ground",
       "kind": "card",
-      "refersTo": "panel",
-      "description": "The cream work surface every tab opens onto; heading closed by a double gold rule.",
-      "html": "<section class=\"ds-panel\"><h2 class=\"ds-panel-title\">Mes recettes</h2><p>Contenu du panneau.</p></section>",
-      "css": ".ds-panel { background: var(--paper); color: var(--ink); border-radius: 0 12px 12px 12px; padding: 1.4rem 1.6rem 1.6rem; box-shadow: 0 14px 34px rgba(46,6,8,0.4); } .ds-panel-title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.55rem; letter-spacing: 0.015em; color: var(--red-deep); border-bottom: 4px double var(--gold); padding-bottom: 0.35rem; }"
+      "refersTo": "section",
+      "description": "No panel: each tab's content lies directly on the flat banquette-red ground; the gold heading is closed by a double gold rule.",
+      "html": "<section class=\"ds-section\"><h2 class=\"ds-section-title\">Mes recettes</h2><p>Contenu de la section.</p></section>",
+      "css": ".ds-section { background: transparent; color: var(--cream); } .ds-section-title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.55rem; letter-spacing: 0.015em; color: var(--gold); border-bottom: 4px double var(--gold); padding-bottom: 0.35rem; }"
     },
     {
       "name": "Menu Line",
       "kind": "custom",
       "refersTo": "menu-line",
-      "description": "Signature recipe entry: display name, dotted leader, portion count on the right.",
+      "description": "Signature recipe entry: cream display name, dotted gold leader, portion count in Or Pâle on the right.",
       "html": "<div class=\"ds-menu-line\"><strong>Crêpes bretonnes</strong><span class=\"ds-servings\">4 pers.</span></div>",
-      "css": ".ds-menu-line { position: relative; padding: 0.9rem 0 1rem; border-bottom: 1px dashed var(--border-soft); } .ds-menu-line::before { content: \"\"; position: absolute; top: 2.05rem; left: 0; right: 0; border-top: 2px dotted rgba(107,84,69,0.45); } .ds-menu-line > strong { position: relative; display: inline-block; background: var(--paper); padding-right: 0.55rem; font-family: var(--font-display); font-weight: 400; font-size: 1.3rem; letter-spacing: 0.015em; color: var(--red-deep); } .ds-menu-line > .ds-servings { float: right; position: relative; background: var(--paper); padding-left: 0.55rem; margin-top: 0.25rem; color: var(--ink); font-family: var(--font-body); font-weight: 800; font-size: 0.9rem; }"
+      "css": ".ds-menu-line { position: relative; padding: 0.9rem 0 1rem; border-bottom: 1px dashed var(--gold-line-soft); } .ds-menu-line::before { content: \"\"; position: absolute; top: 2.05rem; left: 0; right: 0; border-top: 2px dotted rgba(246,217,160,0.4); } .ds-menu-line > strong { position: relative; display: inline-block; background: var(--red-panel); padding-right: 0.55rem; font-family: var(--font-display); font-weight: 400; font-size: 1.3rem; letter-spacing: 0.015em; color: var(--cream); } .ds-menu-line > .ds-servings { float: right; position: relative; background: var(--red-panel); padding-left: 0.55rem; margin-top: 0.25rem; color: var(--gold-soft); font-family: var(--font-body); font-weight: 800; font-size: 0.9rem; }"
     },
     {
       "name": "Ingredient Chip",
       "kind": "chip",
       "refersTo": "chip",
-      "description": "Gold-soft pill for ingredient tags and selectable step ingredients.",
+      "description": "Basil-green pill for ingredient tags and provenance; step-ingredient chips start as light slips and turn green when checked.",
       "html": "<span class=\"ds-chip\">Farine</span>",
-      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--gold-soft); border: 1px solid var(--gold-line); border-radius: 999px; padding: 0.3rem 0.7rem; color: var(--ink); font-family: var(--font-body); font-weight: 700; }"
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--green); border: 1px solid var(--green-deep); border-radius: 999px; padding: 0.3rem 0.7rem; color: var(--cream); font-family: var(--font-body); font-weight: 700; }"
     }
   ],
   "narrative": {
     "northStar": "Le menu dont on cuisine",
-    "overview": "Recipe Picker is a vibrant restaurant menu you cook from: a saturated red room, cream menu paper, dark brown ink, mustard-gold service marks. The world reaches the screen through type, palette, density, and one signature move — the dotted-leader menu line — never through re-invented controls.",
+    "overview": "Chez Mamie is a vibrant restaurant dining room you cook from: one flat banquette red (#A82118) carries the whole room — ground, sections, and the auth door alike, no panels, no paper — with mustard-gold brass for service and basil green for everything fresh. The world reaches the screen through type, palette, density, and one signature move — the dotted-leader menu line — never through re-invented controls.",
     "keyCharacteristics": [
-      "Saturated red page ground with a warm top glow and a darker foot",
-      "Cream menu-paper panels carrying all work surfaces",
+      "One flat banquette-red ground (#A82118) edge to edge — no panels, no paper, no page gradient",
       "Lilita One display lettering over a Karla text face",
       "Dotted-leader menu lines as the recipe list's signature",
-      "Mustard gold reserved for service marks: rules, selection, badges, focus"
+      "Mustard gold for service (rules, focus, primary actions, active tab), basil green for freshness (ingredients, provenance, checked states)",
+      "Deeper red insets (#8A1A12) only where a control needs a recess (ingredient picker, step rows, image placeholders)"
     ],
     "rules": [
-      { "name": "The Red Is the Room Rule", "body": "The red ground owns everything outside the panels; panels never turn gray or white-neutral — the paper is always cream.", "section": "colors" },
-      { "name": "The Gold Is a Waiter Rule", "body": "Gold serves; it never speaks paragraphs. It appears as rules, rings, chips, and badges, always with dark ink when it carries text.", "section": "colors" },
+      { "name": "The Red Is the Room Rule", "body": "Everything is the red room: one flat banquette red carries the whole page, insets go deeper still. No panel, card, or cover sits between the content and the room. No cream, white, or gray surface ever ships — cream exists only as text, light fields only as small writing slips.", "section": "colors" },
+      { "name": "The Gold Is a Waiter Rule", "body": "Gold serves; it never speaks paragraphs. It appears as rules, rings, buttons, and the active tab — always with dark ink when it carries text, or as large display lettering on red.", "section": "colors" },
+      { "name": "The Basil Rule", "body": "Green marks freshness and provenance: ingredients, the catalogue badge, checked states. Always a filled mark with cream text, never a text color on red.", "section": "colors" },
       { "name": "The Two Voices Rule", "body": "Display lettering speaks names and sections; Karla speaks everything actionable.", "section": "typography" },
       { "name": "The Soft Landing Rule", "body": "Every shadow carries an offset and a blur in the red-dark hue; a zero-blur block shadow never ships.", "section": "elevation" }
     ],
     "dos": [
-      "Do keep every work surface on cream paper over the red ground.",
+      "Do keep every surface in the red family — one flat banquette ground, deep insets; cream is only ever text.",
       "Do write headings in Lilita One and close them with the 4px double gold rule.",
-      "Do reserve gold for rules, selection, badges, and focus — always with dark ink when it carries text.",
-      "Do tint secondary text from the brown ink (#6B5445), never neutral gray.",
-      "Do theme browser surfaces from the palette (selection, caret, scrollbars, focus rings, accent-color)."
+      "Do reserve gold for rules, focus, primary actions, and the active tab — always with dark ink when it carries text.",
+      "Do reserve green for freshness marks (ingredients, provenance badge, checked states) — always as a filled mark with cream text.",
+      "Do tint secondary text from the cream (#F3D9B4), never neutral gray.",
+      "Do theme browser surfaces from the palette (selection, caret, scrollbars, focus rings, accent-color in Vert Basilic)."
     ],
     "donts": [
-      "Don't put neutral white or gray panels on the red ground — paper is cream or it isn't this design.",
-      "Don't use gold as body-text color on cream (fails contrast; gold is a mark, not a voice).",
+      "Don't put cream, white, or gray panels on the red ground — the room is red or it isn't this design.",
+      "Don't use gold or green as body-text color on red (gold speaks only large, green never speaks; both are marks, not voices).",
       "Don't ship hard offset block shadows or solid hairline separators — shadows are soft, separators are dashed or dotted.",
-      "Don't re-invent controls in the menu's image: tabs, inputs, and buttons stay standard and scannable; the world lives in type, palette, density, and the dotted leader."
+      "Don't re-invent controls in the restaurant's image: tabs, inputs, and buttons stay standard and scannable; the world lives in type, palette, density, and the dotted leader."
     ]
   }
 }

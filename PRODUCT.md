@@ -65,8 +65,8 @@ machine de dev reste un fait technique, pas une préférence produit.)
 
 ## Brand Commitments
 
-Nom : **Recipe Picker** (🍳). Interface et contenu en français. Aucun autre
-engagement de marque confirmé.
+Nom : **Chez Mamie**, avec un logo médaillon mamie cartoon (`public/logo.png`).
+Interface et contenu en français. Aucun autre engagement de marque confirmé.
 
 ## Evidence on Hand
 
